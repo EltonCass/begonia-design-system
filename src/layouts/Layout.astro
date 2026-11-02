@@ -1,14 +1,20 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 
 interface Props {
   title: string;
   description?: string;
+  /** "light" pages use the sheet color for the whole body; the cover stays dark. */
+  tone?: 'light' | 'dark';
 }
 
-const { title, description = 'Begonia style guide: color, typography, spacing, shadows, borders, layouts and iconography.' } = Astro.props;
+const {
+  title,
+  description = 'Begonia style guide: color, typography, spacing, brand, shadows, borders, layouts and iconography.',
+  tone = 'light',
+} = Astro.props;
 const fullTitle = title === 'Begonia' ? 'Begonia Style Guide' : `${title} · Begonia`;
 ---
 
@@ -20,16 +26,85 @@ const fullTitle = title === 'Begonia' ? 'Begonia Style Guide' : `${title} · Beg
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
+    <ClientRouter />
   </head>
-  <body>
+  <body class={tone}>
     <a class="skip" href="#main">Skip to content</a>
     <Header />
-    <main id="main">
+    <main id="main" transition:name="main">
       <slot />
     </main>
-    <Footer />
+    <div id="toast" class="toast" role="status" aria-live="polite" transition:persist></div>
   </body>
 </html>
+
+<script>
+  // Direction of a page change follows the tab order: a tab further along slides in from the right.
+  let direction = 'forward';
+
+  document.addEventListener('astro:before-preparation', (event) => {
+    const paths = [...document.querySelectorAll<HTMLAnchorElement>('#site-nav a')].map((a) => new URL(a.href).pathname);
+    const from = paths.indexOf(event.from.pathname);
+    const to = paths.indexOf(event.to.pathname);
+    direction = to >= from ? 'forward' : 'back';
+    document.documentElement.dataset.dir = direction;
+  });
+
+  // Astro resets the <html> attributes when it swaps pages, and the animation runs after that.
+  document.addEventListener('astro:after-swap', () => {
+    document.documentElement.dataset.dir = direction;
+  });
+
+  // Anything with data-copy copies its value (CSS) to the clipboard.
+  let timer: number | undefined;
+
+  async function copy(el: HTMLElement) {
+    const text = el.dataset.copy ?? '';
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.append(area);
+      area.select();
+      document.execCommand('copy');
+      area.remove();
+    }
+
+    el.classList.remove('copied');
+    void el.offsetWidth;
+    el.classList.add('copied');
+
+    const toast = document.getElementById('toast');
+    if (!toast) return;
+    toast.replaceChildren();
+    const label = document.createElement('strong');
+    label.textContent = 'Copied';
+    const code = document.createElement('code');
+    code.textContent = text.split('\n')[0];
+    toast.append(label, code);
+    toast.dataset.show = 'true';
+    window.clearTimeout(timer);
+    timer = window.setTimeout(() => (toast.dataset.show = 'false'), 1800);
+  }
+
+  document.addEventListener('click', (event) => {
+    const el = (event.target as HTMLElement).closest<HTMLElement>('[data-copy]');
+    if (el) void copy(el);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    const el = event.target as HTMLElement;
+    // Native buttons already fire click on Enter and Space.
+    if (el.dataset?.copy && el.tagName !== 'BUTTON') {
+      event.preventDefault();
+      void copy(el);
+    }
+  });
+</script>
 
 <style is:global>
   .skip {
@@ -44,13 +119,5 @@ const fullTitle = title === 'Begonia' ? 'Begonia Style Guide' : `${title} · Beg
   }
   .skip:focus { top: var(--space-2); }
 
-  /* Sheets sit on the dark canvas like the Figma pages sit on the file canvas. */
-  .canvas {
-    display: grid;
-    gap: clamp(var(--space-6), 4vw, var(--space-16));
-    width: 100%;
-    max-width: 1920px;
-    margin-inline: auto;
-    padding: clamp(var(--space-3), 2vw, var(--space-8));
-  }
+  .canvas { padding-bottom: var(--space-24); }
 </style>

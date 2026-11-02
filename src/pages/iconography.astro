@@ -48,29 +48,49 @@ const logos = brandNames
 <Layout title="Iconography">
   <h1 class="visually-hidden">Iconography</h1>
   <div class="canvas">
-    <Sheet id="icons" icon="image-square" title="Iconography" rule="var(--mblue-40)">
-      <div class="intro">
-        <p class="about">
-          <strong>Phosphor Icons 2.1</strong><br />Duotone
-        </p>
-        <p class="t-label">
-          {icons.length.toLocaleString('en-US')} icons made by Helena Zhang and Tobias Fried. Most of the icons here are from{' '}
-          <a href="https://phosphoricons.com/">Phosphor Icons</a>.
-        </p>
-        <div class="t-label">
-          <strong>For designer</strong>
-          <p>Icon Stroke 2</p>
-          <p>Icon Corner Radius 2</p>
-        </div>
-        <div class="t-label">
-          <strong>For developer</strong>
-          <p>
-            Phosphor is available as a one-liner script, React package, and Vue package, all of which can be sourced from
-            NPM or from a CDN. More information:{' '}
-            <a href="https://github.com/phosphor-icons/phosphor-home">github.com/phosphor-icons/phosphor-home</a>
+    <Sheet id="icons" icon="image-square" title="Iconography" rule="var(--mblue-40)" hint>
+      <section class="phosphor" aria-labelledby="phosphor-title">
+        <div class="phosphor-main">
+          <p class="eyebrow">Icon library</p>
+          <h3 id="phosphor-title" class="phosphor-name">
+            <i class="ph-duotone ph-flower-lotus" aria-hidden="true"></i>
+            Phosphor Icons
+          </h3>
+          <p class="phosphor-lead">
+            Begonia's icons come from <strong>Phosphor</strong>, a flexible icon family. Use the <strong>Duotone</strong>{' '}
+            weight only: a solid shape at 25% opacity behind a 2px line glyph.
           </p>
+          <ul class="chips">
+            <li>Version 2.1</li>
+            <li>Duotone</li>
+            <li>{icons.length.toLocaleString('en-US')} icons</li>
+            <li>Stroke 2</li>
+            <li>Corner radius 2</li>
+          </ul>
+          <div class="actions">
+            <a class="btn primary" href="https://phosphoricons.com/" rel="noopener">
+              Browse phosphoricons.com<i class="ph-duotone ph-arrow-up-right" aria-hidden="true"></i>
+            </a>
+            <a class="btn" href="https://github.com/phosphor-icons/homepage" rel="noopener">
+              GitHub<i class="ph-duotone ph-github-logo" aria-hidden="true"></i>
+            </a>
+          </div>
         </div>
-      </div>
+        <div class="phosphor-notes">
+          <div>
+            <h4>For designers</h4>
+            <p>Icon stroke 2 and corner radius 2. Icons are drawn on a 256-unit grid, shown here at 20px.</p>
+          </div>
+          <div>
+            <h4>For developers</h4>
+            <p>
+              Phosphor ships as a one-line script, a React package and a Vue package, all available from NPM or a CDN.
+              This site uses the <code>@phosphor-icons/web</code> package.
+            </p>
+            <p class="credit">Made by Helena Zhang and Tobias Fried.</p>
+          </div>
+        </div>
+      </section>
 
       <div class="columns">
         {
@@ -79,14 +99,14 @@ const logos = brandNames
               {col.map((cat) => (
                 <section class="cat">
                   <h3>{cat.title}</h3>
-                  <ul class="grid">
+                  <div class="grid">
                     {byCategory(cat.key).map((i) => (
-                      <li title={i.name}>
+                      <button type="button" class="icon copyable" title={`${i.name}: click to copy`} data-copy={`<i class="ph-duotone ph-${i.name}"></i>`}>
                         <i class={`ph-duotone ph-${i.name}`} aria-hidden="true"></i>
-                        <span class="visually-hidden">{i.name}</span>
-                      </li>
+                        <span class="visually-hidden">Copy {i.name}</span>
+                      </button>
                     ))}
-                  </ul>
+                  </div>
                 </section>
               ))}
             </div>
@@ -95,34 +115,75 @@ const logos = brandNames
       </div>
     </Sheet>
 
-    <Sheet id="logos" icon="figma-logo" title="Logos" rule="var(--mblue-40)">
-      <ul class="logos">
+    <Sheet id="logos" icon="figma-logo" title="Logos" rule="var(--mblue-40)" hint>
+      <div class="logos">
         {
           logos.map((l) => (
-            <li title={l.title}>
-              <svg viewBox="0 0 24 24" width="40" height="40" role="img" aria-label={l.title} fill={`#${l.hex}`}>
+            <button type="button" class="logo-btn copyable" title={`${l.title}: click to copy its color`} data-copy={`fill: #${l.hex.toUpperCase()}; /* ${l.title} */`}>
+              <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" fill={`#${l.hex}`}>
                 <path d={l.path} />
               </svg>
-            </li>
+              <span class="visually-hidden">Copy {l.title} color</span>
+            </button>
           ))
         }
-      </ul>
+      </div>
       <p class="t-label note">Brand marks are drawn from Simple Icons in each brand's own color.</p>
     </Sheet>
   </div>
 </Layout>
 
 <style>
-  .intro {
+  .phosphor {
     display: grid;
-    grid-template-columns: auto minmax(0, 2fr) minmax(0, 1fr) minmax(0, 2fr);
-    gap: var(--space-6) clamp(var(--space-4), 3vw, 56px);
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: var(--space-8) clamp(var(--space-8), 5vw, 96px);
     align-items: start;
-    margin-bottom: var(--space-10);
-    font-family: Mosk, sans-serif;
+    margin-bottom: var(--space-12);
+    padding: clamp(var(--space-6), 3vw, 56px);
+    background: linear-gradient(135deg, var(--blue-10), var(--white-10) 70%);
+    border: 1px solid var(--blue-20);
+    border-radius: 16px;
   }
-  .about { font-size: 12px; line-height: 1.4; }
-  .intro a { color: var(--blue-70); }
+  .eyebrow { font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-70); }
+  .phosphor-name {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin: var(--space-2) 0 var(--space-4);
+    font-size: clamp(36px, 4.4vw, 64px);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .phosphor-name i { font-size: 1.05em; color: var(--mblue-40); }
+  .phosphor-lead { max-width: 52ch; font-size: clamp(17px, 1.4vw, 22px); line-height: 1.45; color: var(--black-30); }
+  .chips { list-style: none; margin: var(--space-5) 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .chips li { padding: 4px 14px; font-size: 14px; font-weight: 600; background: var(--white-10); border: 1px solid var(--blue-30); border-radius: 999px; color: var(--blue-80); }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--mblue-40);
+    background: var(--white-10);
+    border: 2px solid var(--mblue-40);
+    border-radius: var(--radius-sm);
+    transition: background-color 100ms, color 100ms;
+  }
+  .btn i { font-size: 22px; }
+  .btn:hover { background: var(--mblue-40); color: var(--white-10); }
+  .btn.primary { background: var(--mblue-40); color: var(--white-10); }
+  .btn.primary:hover { background: var(--mblue-50); border-color: var(--mblue-50); }
+  .phosphor-notes { display: grid; gap: var(--space-5); font-size: 15px; line-height: 1.5; color: var(--black-30); }
+  .phosphor-notes h4 { font-size: 16px; font-weight: 600; margin-bottom: var(--space-1); color: var(--black-50); }
+  .phosphor-notes p + p { margin-top: var(--space-2); }
+  .credit { font-size: 13px; color: var(--black-20); }
+  code { font-family: ui-monospace, Consolas, monospace; font-size: 0.92em; }
 
   .columns {
     display: grid;
@@ -133,20 +194,15 @@ const logos = brandNames
   .col { display: grid; gap: var(--space-6); }
   .cat h3 { font-size: 15px; font-weight: 600; margin-bottom: var(--space-3); }
   .grid {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(26px, 1fr));
     gap: var(--space-2) 0;
   }
-  .grid li { display: grid; place-items: center; width: 26px; height: 26px; font-size: 20px; color: var(--black-50); }
-  .grid li:hover { color: var(--mblue-40); }
+  .icon { display: grid; place-items: center; width: 26px; height: 26px; font-size: 20px; color: var(--black-50); border-radius: 4px; }
+  .icon:hover { color: var(--mblue-40); }
 
+  .logo-btn { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 8px; }
   .logos {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
     gap: var(--space-6) var(--space-4);
@@ -155,11 +211,10 @@ const logos = brandNames
   .note { margin-top: var(--space-6); color: var(--black-20); }
 
   @media (max-width: 1100px) {
-    .intro { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .phosphor { grid-template-columns: minmax(0, 1fr); }
     .columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
   @media (max-width: 700px) {
-    .intro { grid-template-columns: minmax(0, 1fr); }
     .columns { grid-template-columns: minmax(0, 1fr); }
   }
 </style>

@@ -6,40 +6,42 @@ interface Props {
   /** CSS color of the rule under the header. Each Figma sheet has its own. */
   rule: string;
   id?: string;
+  /** Show the "click to copy" hint above the content. */
+  hint?: boolean;
 }
-const { icon, title, rule, id } = Astro.props;
+const { icon, title, rule, id, hint = false } = Astro.props;
 ---
 
 <section class="sheet" id={id} style={`--rule: ${rule}`} aria-labelledby={id ? `${id}-title` : undefined}>
   <header class="head">
-    <h2 class="title" id={id ? `${id}-title` : undefined}>
-      <i class={`ph-duotone ph-${icon}`} aria-hidden="true"></i>
-      {title}
-    </h2>
-    <span class="version">v 1.0</span>
+    <div class="container inner">
+      <h2 class="title" id={id ? `${id}-title` : undefined}>
+        <i class={`ph-duotone ph-${icon}`} aria-hidden="true"></i>
+        {title}
+      </h2>
+    </div>
   </header>
-  <div class="body">
+  <div class="container body">
+    {
+      hint && (
+        <p class="hint">
+          <i class="ph-duotone ph-copy" aria-hidden="true" />
+          Click a card to copy its CSS.
+        </p>
+      )
+    }
     <slot />
   </div>
 </section>
 
 <style>
   .sheet {
-    background: var(--white-10);
     color: var(--black-50);
-    border-radius: clamp(16px, 2.2vw, 40px);
-    overflow: hidden;
     font-family: var(--font-display);
   }
-  .head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-4);
-    min-height: clamp(64px, 5.8vw, 112px);
-    padding-inline: clamp(var(--space-4), 3.4vw, 64px);
-    border-bottom: clamp(2px, 0.2vw, 4px) solid var(--rule);
-  }
+  .sheet + .sheet { margin-top: var(--space-16); }
+  .head { border-bottom: clamp(2px, 0.2vw, 4px) solid var(--rule); }
+  .inner { display: flex; align-items: center; min-height: clamp(64px, 5.8vw, 112px); }
   .title {
     display: flex;
     align-items: center;
@@ -51,10 +53,14 @@ const { icon, title, rule, id } = Astro.props;
     text-shadow: 0 4px 8px rgba(2, 27, 39, 0.1), 0 10px 17px rgba(2, 27, 39, 0.1);
   }
   .title i { font-size: 1.35em; }
-  .version {
-    font-size: clamp(16px, 1.7vw, 28px);
-    font-weight: 600;
-    white-space: nowrap;
+  .body { padding-block: clamp(var(--space-6), 3.4vw, 64px); }
+  .hint {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-6);
+    font-size: 14px;
+    color: var(--black-20);
   }
-  .body { padding: clamp(var(--space-4), 3.4vw, 64px); }
+  .hint i { font-size: 18px; }
 </style>

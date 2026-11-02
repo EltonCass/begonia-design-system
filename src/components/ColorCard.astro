@@ -21,7 +21,7 @@ const inverse = family === 'white';
       <p><span>Base Name: </span>{family.toUpperCase()}</p>
       <p><span>Variation: </span>{base.step}</p>
     </div>
-    <div class="codes t-h3">
+    <div class="codes t-h3 copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={`--${family}-50: ${base.hex};`}>
       <span>HEX: #{base.hex.slice(1)}</span>
       <span>HSL: {base.hsl}</span>
     </div>
@@ -29,18 +29,18 @@ const inverse = family === 'white';
 
   {
     [tints, shades].map((row) => (
-      <ul class="row">
+      <div class="row">
         {row.map((s) => (
-          <li class="var">
+          <div class="var copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={`--${family}-${s.step}: ${s.hex};`}>
             <span class="chip" style={`background: ${s.hex}`} />
             <span class="meta">
               <span class="t-h5 var-step">VAR: {s.step}</span>
               <span class="mono">HEX: {s.hex}</span>
               <span class="mono">HSL: {s.hsl}</span>
             </span>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     ))
   }
 </article>
@@ -78,9 +78,6 @@ const inverse = family === 'white';
     letter-spacing: 0.01em;
   }
   .row {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0;

@@ -16,14 +16,14 @@ const sections = [
   { href: 'color/', icon: 'palette', title: 'Color', text: 'Eleven nine-step palettes, alphas and named gradients.' },
   { href: 'typography/', icon: 'pen-nib', title: 'Typography', text: 'Open Sans and Mosk, with heading and content sizes.' },
   { href: 'spacing/', icon: 'table', title: 'Spacing', text: 'The spacing scale and how it measures out a page.' },
+  { href: 'brand/', icon: 'person-simple', title: 'Brand', text: 'The begonia logo at every size.' },
   { href: 'shadows-borders/', icon: 'intersect', title: 'Shadows & borders', text: 'Drop, inner and color shadows. One-side and full borders.' },
   { href: 'layouts/', icon: 'layout', title: 'Layouts', text: 'Offsets and square grids, and a layout in use.' },
   { href: 'iconography/', icon: 'image-square', title: 'Iconography', text: 'Phosphor duotone icons and brand logos.' },
-  { href: 'brand/', icon: 'person-simple', title: 'Brand', text: 'The begonia logo at every size.' },
 ];
 ---
 
-<Layout title="Begonia">
+<Layout title="Begonia" tone="dark">
   <section class="hero" aria-labelledby="cover-title">
     <div class="backdrop" aria-hidden="true">
       {
@@ -45,7 +45,7 @@ const sections = [
         <span>“BEGONIA”</span>
         <span>STYLE GUIDE</span>
       </h1>
-      <Logo size="var(--logo)" />
+      <Logo size="var(--logo)" eager />
     </div>
   </section>
 
@@ -111,7 +111,7 @@ const sections = [
     text-shadow: 0 4px 8px rgba(2, 27, 39, 0.1), 0 10px 17px rgba(2, 27, 39, 0.1);
   }
 
-  .index { margin-top: var(--space-16); }
+  .index { margin-top: var(--space-16); padding-bottom: var(--space-24); }
   .cards {
     list-style: none;
     margin: 0;

@@ -18,34 +18,34 @@ const slug = (n: string) => n.toLowerCase();
 <Layout title="Color">
   <h1 class="visually-hidden">Color</h1>
   <div class="canvas">
-    <Sheet id="palette" icon="palette" title="Color palette" rule="var(--red-60)">
+    <Sheet id="palette" icon="palette" title="Color palette" rule="var(--red-60)" hint>
       <div class="cards">
         {order.map((family) => <ColorCard family={family} />)}
         <AlphaCard />
       </div>
     </Sheet>
 
-    <Sheet id="gradients" icon="palette" title="Gradients" rule="var(--red-60)">
+    <Sheet id="gradients" icon="palette" title="Gradients" rule="var(--red-60)" hint>
       <div class="groups">
         <section>
           <h3 class="group"><i class="ph-duotone ph-paint-brush" aria-hidden="true"></i>Dark Color</h3>
-          <ul class="tiles">
+          <div class="tiles">
             {dark.map((n) => (
-              <li class="tile" style={`background: ${gradient(slug(n))}`}>
+              <div class="tile copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={`background: ${gradient(slug(n))};`} style={`background: ${gradient(slug(n))}`}>
                 <span class="label on-dark">{n}</span>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
         <section>
           <h3 class="group"><i class="ph-duotone ph-paint-brush" aria-hidden="true"></i>Light Colors</h3>
-          <ul class="tiles">
+          <div class="tiles">
             {light.map((n) => (
-              <li class="tile" style={`background: ${gradient(slug(n))}`}>
+              <div class="tile copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={`background: ${gradient(slug(n))};`} style={`background: ${gradient(slug(n))}`}>
                 <span class="label on-light">{n}</span>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </section>
         <section>
           <h3 class="group"><i class="ph-duotone ph-share-network" aria-hidden="true"></i>Mesh Colors</h3>
@@ -79,9 +79,6 @@ const slug = (n: string) => n.toLowerCase();
   .group i { font-size: 22px; }
 
   .tiles {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 168px));
     gap: var(--space-8) clamp(var(--space-4), 6vw, 100px);

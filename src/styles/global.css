@@ -57,3 +57,58 @@ a:hover { text-decoration-thickness: 2px; }
 .muted { color: var(--text-muted); }
 
 * { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+
+/* Inner pages: the body is the sheet color. The cover keeps the dark canvas. */
+body.light { background: var(--white-10); color: var(--black-50); }
+
+/* Click to copy CSS */
+.copyable { cursor: pointer; }
+.copyable:hover { outline: 2px solid var(--mblue-30); outline-offset: 2px; }
+.copyable:focus-visible { outline: 2px solid var(--mblue-30); outline-offset: 3px; }
+button.copyable { font: inherit; color: inherit; background: none; border: 0; padding: 0; }
+.copied { animation: begonia-copied 700ms ease-out; }
+@keyframes begonia-copied {
+  0% { outline: 3px solid var(--green-30); outline-offset: 2px; }
+  100% { outline: 3px solid transparent; outline-offset: 8px; }
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: var(--space-6);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: min(92vw, 560px);
+  padding: var(--space-3) var(--space-5);
+  background: var(--black-40);
+  color: var(--white-10);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xl);
+  font-size: 14px;
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 150ms, transform 150ms;
+}
+.toast[data-show='true'] { opacity: 1; transform: translate(-50%, 0); }
+.toast strong { color: var(--green-10); font-weight: 600; }
+.toast code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, Consolas, monospace; }
+
+/* Page changes slide in the direction of travel along the tab order. */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; }
+@keyframes begonia-out-left { to { opacity: 0; transform: translateX(-72px); } }
+@keyframes begonia-in-right { from { opacity: 0; transform: translateX(72px); } }
+@keyframes begonia-out-right { to { opacity: 0; transform: translateX(72px); } }
+@keyframes begonia-in-left { from { opacity: 0; transform: translateX(-72px); } }
+:root[data-dir='forward']::view-transition-old(main) { animation: 200ms ease-in both begonia-out-left; }
+:root[data-dir='forward']::view-transition-new(main) { animation: 260ms ease-out both begonia-in-right; }
+:root[data-dir='back']::view-transition-old(main) { animation: 200ms ease-in both begonia-out-right; }
+:root[data-dir='back']::view-transition-new(main) { animation: 260ms ease-out both begonia-in-left; }
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
+  .copied { animation: none; }
+  html { scroll-behavior: auto; }
+}

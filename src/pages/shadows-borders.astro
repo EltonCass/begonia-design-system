@@ -1,15 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Sheet from '../components/Sheet.astro';
+import { tok } from '../lib/css';
 
 const tint = 'rgba(2, 27, 39,';
 const drop = [
-  { label: 'Deep-rb-15', shadow: 'var(--shadow-rb)' },
-  { label: 'Deep-lb-15', shadow: 'var(--shadow-lb)' },
-  { label: 'Deep-md', shadow: 'var(--shadow-md)' },
-  { label: 'Deep-lg', shadow: 'var(--shadow-lg)' },
-  { label: 'Deep-xl', shadow: 'var(--shadow-xl)' },
-  { label: 'Deep-2xl', shadow: 'var(--shadow-2xl)' },
+  { label: 'Deep-rb-15', shadow: tok('shadow-rb') },
+  { label: 'Deep-lb-15', shadow: tok('shadow-lb') },
+  { label: 'Deep-md', shadow: tok('shadow-md') },
+  { label: 'Deep-lg', shadow: tok('shadow-lg') },
+  { label: 'Deep-xl', shadow: tok('shadow-xl') },
+  { label: 'Deep-2xl', shadow: tok('shadow-2xl') },
 ];
 // Inner shadows are not in tokens.json; these are read off the Figma sheet.
 const inner = [
@@ -21,79 +22,95 @@ const inner = [
   { label: 'Deep-xl', shadow: `inset 0 10px 24px 0 ${tint} 0.12), inset 0 -24px 36px 0 ${tint} 0.3)` },
 ];
 const color = [
-  { label: 'Red-60/50', bg: 'var(--red-60)', shadow: 'var(--glow-red)' },
-  { label: 'Lavender-50/50', bg: 'var(--dlavender-50)', shadow: 'var(--glow-lavender)' },
-  { label: 'Green-30/50', bg: 'var(--green-30)', shadow: 'var(--glow-green)' },
-  { label: 'MBlue-50/50', bg: 'var(--mblue-30)', shadow: 'var(--glow-blue)' },
-  { label: 'Blue-80/50', bg: 'var(--blue-80)', shadow: '-6px 10px 15px 0 #194f7180, -3px 4px 8px 0 #194f7180' },
-  { label: 'Mbrown-50/50', bg: 'var(--mbrown-50)', shadow: 'var(--glow-mustard)' },
+  { label: 'Red-60/50', bg: tok('red-60'), shadow: tok('glow-red') },
+  { label: 'Lavender-50/50', bg: tok('dlavender-50'), shadow: tok('glow-lavender') },
+  { label: 'Green-30/50', bg: tok('green-30'), shadow: tok('glow-green') },
+  { label: 'MBlue-50/50', bg: tok('mblue-30'), shadow: tok('glow-blue') },
+  { label: 'Blue-80/50', bg: tok('blue-80'), shadow: '-6px 10px 15px 0 #194f7180, -3px 4px 8px 0 #194f7180' },
+  { label: 'Mbrown-50/50', bg: tok('mbrown-50'), shadow: tok('glow-mustard') },
 ];
 const oneSide = [
-  { label: 'Black-b-50', css: 'border-bottom: 2px solid var(--black-50)' },
-  { label: 'Green-b-30', css: 'border-bottom: 2px solid var(--green-30)' },
-  { label: 'Blue-b-30', css: 'border-bottom: 2px solid var(--mblue-30)' },
-  { label: 'Black-r-50', css: 'border-left: 2px solid var(--black-50)' },
-  { label: 'Green-r-30', css: 'border-left: 2px solid var(--green-30)' },
-  { label: 'Blue-r-30', css: 'border-left: 2px solid var(--mblue-30)' },
+  { label: 'Black-b-50', css: `border-bottom: 2px solid ${tok('black-50')};` },
+  { label: 'Green-b-30', css: `border-bottom: 2px solid ${tok('green-30')};` },
+  { label: 'Blue-b-30', css: `border-bottom: 2px solid ${tok('mblue-30')};` },
+  { label: 'Black-r-50', css: `border-left: 2px solid ${tok('black-50')};` },
+  { label: 'Green-r-30', css: `border-left: 2px solid ${tok('green-30')};` },
+  { label: 'Blue-r-30', css: `border-left: 2px solid ${tok('mblue-30')};` },
 ];
 const allSides = [
-  { label: 'Black-50', css: 'border: 2px solid var(--black-50)' },
-  { label: 'Green-30', css: 'border: 2px solid var(--green-30)' },
-  { label: 'MBlue-30', css: 'border: 2px solid var(--mblue-30)' },
-  { label: 'Red-60', css: 'border: 2px solid var(--red-60)' },
-  { label: 'BSapphire-30', css: 'border: 2px dashed var(--bsapphire-30)' },
-  { label: 'MBrown-50', css: 'border: 2px dashed var(--mbrown-50)' },
+  { label: 'Black-50', css: `border: 2px solid ${tok('black-50')};` },
+  { label: 'Green-30', css: `border: 2px solid ${tok('green-30')};` },
+  { label: 'MBlue-30', css: `border: 2px solid ${tok('mblue-30')};` },
+  { label: 'Red-60', css: `border: 2px solid ${tok('red-60')};` },
+  { label: 'BSapphire-30', css: `border: 2px dashed ${tok('bsapphire-30')};` },
+  { label: 'MBrown-50', css: `border: 2px dashed ${tok('mbrown-50')};` },
 ];
+const shadowCss = (v: string) => `box-shadow: ${v};`;
 ---
 
 <Layout title="Shadows & borders">
   <h1 class="visually-hidden">Shadows and borders</h1>
   <div class="canvas">
-    <Sheet id="shadows" icon="intersect" title="Shadows" rule="var(--dlavender-50)">
+    <Sheet id="shadows" icon="intersect" title="Shadows" rule="var(--dlavender-50)" hint>
       <section>
         <h3 class="group"><i class="ph-duotone ph-drop" aria-hidden="true"></i>Drop</h3>
-        <ul class="swatches">
+        <div class="swatches">
           {drop.map((s) => (
-            <li class="swatch" style={`box-shadow: ${s.shadow}`}><span class="label">{s.label}</span></li>
+            <div class="swatch copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={shadowCss(s.shadow)} style={shadowCss(s.shadow)}>
+              <span class="label">{s.label}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
       <section>
         <h3 class="group"><i class="ph-duotone ph-sun-dim" aria-hidden="true"></i>Inner</h3>
-        <ul class="swatches">
+        <div class="swatches">
           {inner.map((s) => (
-            <li class="swatch" style={`box-shadow: ${s.shadow}`}><span class="label">{s.label}</span></li>
+            <div class="swatch copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={shadowCss(s.shadow)} style={shadowCss(s.shadow)}>
+              <span class="label">{s.label}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
       <section>
         <h3 class="group"><i class="ph-duotone ph-palette" aria-hidden="true"></i>Color</h3>
-        <ul class="swatches">
+        <div class="swatches">
           {color.map((s) => (
-            <li class="swatch colored" style={`background: ${s.bg}; box-shadow: ${s.shadow}`}>
+            <div
+              class="swatch colored copyable"
+              role="button"
+              tabindex="0"
+              title="Click to copy CSS"
+              data-copy={`background-color: ${s.bg};\n${shadowCss(s.shadow)}`}
+              style={`background: ${s.bg}; ${shadowCss(s.shadow)}`}
+            >
               <span class="label dark">{s.label}</span>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
     </Sheet>
 
-    <Sheet id="borders" icon="text-b" title="Borders" rule="var(--dlavender-50)">
+    <Sheet id="borders" icon="text-b" title="Borders" rule="var(--dlavender-50)" hint>
       <section>
         <h3 class="group"><i class="ph-duotone ph-drop" aria-hidden="true"></i>One side (examples)</h3>
-        <ul class="swatches">
+        <div class="swatches">
           {oneSide.map((s) => (
-            <li class="swatch flat" style={s.css}><span class="label">{s.label}</span></li>
+            <div class="swatch flat copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={s.css} style={s.css}>
+              <span class="label">{s.label}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
       <section>
         <h3 class="group"><i class="ph-duotone ph-sun-dim" aria-hidden="true"></i>All Sides</h3>
-        <ul class="swatches">
+        <div class="swatches">
           {allSides.map((s) => (
-            <li class="swatch flat" style={s.css}><span class="label">{s.label}</span></li>
+            <div class="swatch flat copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={s.css} style={s.css}>
+              <span class="label">{s.label}</span>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
     </Sheet>
   </div>
@@ -112,8 +129,6 @@ const allSides = [
   .group i { font-size: 24px; }
 
   .swatches {
-    list-style: none;
-    margin: 0;
     padding: 0 clamp(0px, 0.6vw, 12px);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

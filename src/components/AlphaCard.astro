@@ -1,5 +1,6 @@
 ---
 import { hexToHsl } from '../lib/color';
+import { tok } from '../lib/css';
 
 const cells = [
   { label: 'Black-50-20%', token: 'alpha-black-20', pct: 20, base: '#1C1C1C' },
@@ -12,24 +13,24 @@ const cells = [
   { label: 'White-10-25%', token: 'alpha-white-25', pct: 25, base: '#FBFBFB' },
 ].map((c) => {
   const [h, s, l] = hexToHsl(c.base);
-  return { ...c, hex: c.base, hsl: `${h}, ${s}, ${l}, ${c.pct}%`, dark: c.base === '#FBFBFB' };
+  return { ...c, hex: c.base, hsl: `${h}, ${s}, ${l}, ${c.pct}%`, dark: c.base === '#FBFBFB', value: tok(c.token) };
 });
 ---
 
 <article class="card">
   <p class="t-h4 name">Base Name: Transparent (Alphas)</p>
-  <ul class="row">
+  <div class="row">
     {
       cells.map((c) => (
-        <li class:list={['var', { dark: c.dark }]}>
+        <div class:list={['var', 'copyable', { dark: c.dark }]} role="button" tabindex="0" title="Click to copy CSS" data-copy={`--${c.token}: ${c.value};`}>
           <span class="t-h5 var-step">{c.label}</span>
           <span class="mono">HEX: {c.hex}</span>
           <span class="mono">HSL: {c.hsl}</span>
           <span class="chip" style={`--alpha: var(--${c.token})`} />
-        </li>
+        </div>
       ))
     }
-  </ul>
+  </div>
 </article>
 
 <style>
@@ -45,9 +46,6 @@ const cells = [
   }
   .name { padding-left: 4px; }
   .row {
-    list-style: none;
-    margin: 0;
-    padding: 0;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px 4px;

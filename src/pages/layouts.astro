@@ -5,18 +5,23 @@ import { samsa } from '../lib/copy';
 
 const offsets = [8, 32, 16];
 const grids = [4, 8, 16, 32];
+
+const gridCss = (n: number) =>
+  `background-image: linear-gradient(rgba(35, 148, 183, 0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(35, 148, 183, 0.35) 1px, transparent 1px);\nbackground-size: ${n}px ${n}px;`;
+const offsetCss = (n: number) =>
+  `display: grid;\ngrid-auto-columns: ${n}px;\ngrid-auto-rows: ${n}px;\ngap: ${n}px;\npadding: ${n}px;`;
 ---
 
 <Layout title="Layouts">
   <h1 class="visually-hidden">Layouts</h1>
   <div class="canvas">
-    <Sheet id="layouts" icon="layout" title="Layouts" rule="var(--bsapphire-30)">
+    <Sheet id="layouts" icon="layout" title="Layouts" rule="var(--bsapphire-30)" hint>
       <div class="board">
         {
           offsets.map((n) => (
             <section class="spec" style={`--n: ${n}px`}>
               <h3><i class="ph-duotone ph-squares-four" aria-hidden="true"></i>Offset {n} / Auto Column {n} width / Auto Row {n} height</h3>
-              <div class="frame offset" role="img" aria-label={`A ${n}px layout grid`}></div>
+              <div class="frame offset copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={offsetCss(n)} aria-label={`Copy CSS for a ${n}px offset layout`}></div>
             </section>
           ))
         }
@@ -26,7 +31,7 @@ const grids = [4, 8, 16, 32];
             grids.slice(0, 2).map((n) => (
               <section class="spec" style={`--n: ${n}px`}>
                 <h3><i class={`ph-duotone ph-number-circle-${n === 4 ? 'four' : 'eight'}`} aria-hidden="true"></i>Grid {n}</h3>
-                <div class="frame grid" role="img" aria-label={`A ${n}px square grid`}></div>
+                <div class="frame grid copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={gridCss(n)} aria-label={`Copy CSS for a ${n}px grid`}></div>
               </section>
             ))
           }
@@ -36,7 +41,7 @@ const grids = [4, 8, 16, 32];
           grids.slice(2).map((n) => (
             <section class="spec" style={`--n: ${n}px`}>
               <h3><i class="ph-duotone ph-squares-four" aria-hidden="true"></i>Grid {n}</h3>
-              <div class="frame grid" role="img" aria-label={`A ${n}px square grid`}></div>
+              <div class="frame grid copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={gridCss(n)} aria-label={`Copy CSS for a ${n}px grid`}></div>
             </section>
           ))
         }

@@ -16,7 +16,7 @@ const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7
 <Layout title="Spacing">
   <h1 class="visually-hidden">Spacing</h1>
   <div class="canvas">
-    <Sheet id="spacing" icon="table" title="Spacing" rule="var(--mbrown-70)">
+    <Sheet id="spacing" icon="table" title="Spacing" rule="var(--mbrown-70)" hint>
       <div class="layout">
         <div class="scale">
           <table>
@@ -25,8 +25,8 @@ const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7
             </thead>
             <tbody>
               {steps.map((s) => (
-                <tr>
-                  <td>{s.name}</td>
+                <tr class="copyable" title="Click to copy CSS" data-copy={`--space-${s.name.replace('.', '_')}: ${s.rem}; /* ${s.px}px */`}>
+                  <td><button type="button" class="rowbtn">{s.name}</button></td>
                   <td>{s.rem}</td>
                   <td>{s.px}px</td>
                   <td class="barcell">{s.px > 0 && <span class="bar" style={`width: ${s.px}px`}></span>}</td>
@@ -77,6 +77,8 @@ const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7
   table { width: 100%; border-collapse: collapse; font-family: 'Roboto', sans-serif; font-size: 15px; }
   th { text-align: left; font-weight: 500; padding: var(--space-3) var(--space-3) var(--space-3) 0; }
   td { padding: 10px 12px 10px 0; border-top: 1px solid var(--black-10); }
+  tbody tr:hover { background: var(--blue-10); }
+  .rowbtn { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
   tbody tr:first-child td { border-top-color: var(--black-30); }
   th:first-child, td:first-child { width: 22%; }
   .barcell { width: 100%; padding-right: 0; }
