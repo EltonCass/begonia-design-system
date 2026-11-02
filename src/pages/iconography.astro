@@ -1,6 +1,5 @@
 ---
 import { icons } from '@phosphor-icons/core';
-import * as si from 'simple-icons';
 import Layout from '../layouts/Layout.astro';
 import Sheet from '../components/Sheet.astro';
 
@@ -33,16 +32,6 @@ const columns: { title: string; key: string }[][] = [
 ];
 const byCategory = (key: string) => icons.filter((i) => i.figma_category === key);
 
-const brandNames = [
-  'Instagram', 'X', 'Facebook', 'Youtube', 'Tiktok', 'Twitch', 'Apple', 'Google', 'Dribbble', 'Behance',
-  'Figma', 'Github', 'Gitlab', 'Spotify', 'Steam', 'Telegram', 'Whatsapp', 'Pinterest', 'Reddit', 'Medium',
-  'Snapchat', 'Firefox', 'Notion', 'Dropbox', 'Discord', 'Docker', 'Android', 'Airbnb', 'Bitcoin', 'Ethereum',
-  'Paypal', 'Netflix', 'Shopify', 'Trello', 'Tumblr', 'Vimeo', 'Wordpress', 'Stackoverflow', 'Googledrive', 'Googlemeet',
-  'Gmail', 'Zoom', 'Playstation', 'Duolingo', 'Patreon', 'Mastodon', 'Bluesky', 'Threads', 'Astro', 'Typescript', 'Dotnet',
-];
-const logos = brandNames
-  .map((n) => (si as Record<string, { title: string; hex: string; path: string } | undefined>)[`si${n}`])
-  .filter((l): l is { title: string; hex: string; path: string } => Boolean(l));
 ---
 
 <Layout title="Iconography">
@@ -115,21 +104,6 @@ const logos = brandNames
       </div>
     </Sheet>
 
-    <Sheet id="logos" icon="figma-logo" title="Logos" hint>
-      <div class="logos">
-        {
-          logos.map((l) => (
-            <button type="button" class="logo-btn copyable" title={`${l.title}: click to copy its color`} data-copy={`fill: #${l.hex.toUpperCase()}; /* ${l.title} */`}>
-              <svg viewBox="0 0 24 24" width="40" height="40" aria-hidden="true" fill={`#${l.hex}`}>
-                <path d={l.path} />
-              </svg>
-              <span class="visually-hidden">Copy {l.title} color</span>
-            </button>
-          ))
-        }
-      </div>
-      <p class="t-label note">Brand marks are drawn from Simple Icons in each brand's own color.</p>
-    </Sheet>
   </div>
 </Layout>
 
@@ -201,14 +175,6 @@ const logos = brandNames
   .icon { display: grid; place-items: center; width: 26px; height: 26px; font-size: 20px; color: var(--black-50); border-radius: 4px; }
   .icon:hover { color: var(--mblue-40); }
 
-  .logo-btn { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 8px; }
-  .logos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
-    gap: var(--space-6) var(--space-4);
-    justify-items: center;
-  }
-  .note { margin-top: var(--space-6); color: var(--black-20); }
 
   @media (max-width: 1100px) {
     .phosphor { grid-template-columns: minmax(0, 1fr); }

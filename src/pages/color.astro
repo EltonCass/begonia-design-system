@@ -4,7 +4,8 @@ import Sheet from '../components/Sheet.astro';
 import ColorCard from '../components/ColorCard.astro';
 import AlphaCard from '../components/AlphaCard.astro';
 import tokens from '../data/tokens.json';
-import meshBlueGreen from '../assets/mesh-blue-green.svg';
+import AssetCard from '../components/AssetCard.astro';
+import { svgAsset } from '../lib/assets';
 
 // Same order as the Figma palette sheet, read row by row.
 const order = ['red', 'blue', 'mbrown', 'bsapphire', 'dwhite', 'mblue', 'dlavender', 'green', 'gray', 'black', 'white'];
@@ -13,6 +14,14 @@ const gradient = (name: string) => tokens.gradient.tokens.find((t) => t.name ===
 const dark = ['Moonlit-Asteroid', 'Dark-Purple', 'Ruby-Red', 'Tropical-Rain-Forest', 'Indigo-Rainbow'];
 const light = ['See-Egg-Blue', 'Turquoise-Blue'];
 const slug = (n: string) => n.toLowerCase();
+
+// Named by the two colors along the top edge, left to right (see the Mesh group in the Claude artifact).
+const meshes = [
+  { file: 'mesh-green-purple', name: 'Green / Purple', top: 'green and purple', bottom: 'blue and sapphire' },
+  { file: 'mesh-purple-sapphire', name: 'Purple / Sapphire', top: 'purple and sapphire', bottom: 'green and blue' },
+  { file: 'mesh-sapphire-blue', name: 'Sapphire / Blue', top: 'sapphire and blue', bottom: 'purple and green' },
+  { file: 'mesh-blue-green', name: 'Blue / Green', top: 'blue and green', bottom: 'sapphire and purple' },
+].map((m) => ({ ...m, asset: svgAsset('meshes', m.file), alt: `Mesh gradient with ${m.top} along the top and ${m.bottom} along the bottom` }));
 ---
 
 <Layout title="Color">
@@ -49,7 +58,10 @@ const slug = (n: string) => n.toLowerCase();
         </section>
         <section>
           <h3 class="group"><i class="ph-duotone ph-share-network" aria-hidden="true"></i>Mesh Colors</h3>
-          <img class="mesh" src={meshBlueGreen.src} alt="Mesh gradient: blue and green along the top, lavender and teal below" width="240" height="238" />
+          <p class="note">Export any mesh as SVG: download the file, or copy its code.</p>
+          <div class="meshes">
+            {meshes.map((m) => <AssetCard asset={m.asset} name={m.name} alt={m.alt} />)}
+          </div>
         </section>
       </div>
     </Sheet>
@@ -103,5 +115,6 @@ const slug = (n: string) => n.toLowerCase();
   .on-dark { background: rgba(2, 27, 39, 0.5); color: #fbfbfb; }
   .on-light { background: rgba(2, 27, 39, 0.25); color: #021b27; text-shadow: none; }
 
-  .mesh { width: min(100%, 240px); height: auto; border-radius: 2px; }
+  .note { margin-bottom: var(--space-4); font-size: 14px; color: var(--black-20); }
+  .meshes { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 240px)); gap: var(--space-6) var(--space-6); }
 </style>

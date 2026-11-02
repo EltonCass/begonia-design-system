@@ -1,35 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Sheet from '../components/Sheet.astro';
+import Bookmark from '../components/Bookmark.astro';
+import Logo from '../components/Logo.astro';
 import tokens from '../data/tokens.json';
 import { tok } from '../lib/css';
+import { svgAsset } from '../lib/assets';
 
 const base = import.meta.env.BASE_URL;
 
-const resources = [
+const figma = svgAsset('logos', 'figma');
+const github = svgAsset('logos', 'github');
+const claude = svgAsset('logos', 'claude');
+
+// Each bookmark sits on a different mesh gradient, as Begonia's Bookmark does when a page has no image.
+const bookmarks = [
   {
-    icon: 'figma-logo',
-    name: 'Figma Community file',
-    title: 'Begonia style guide',
-    text: 'The source design. Inspect the frames, colors and text styles, or duplicate the file into your own drafts.',
     href: 'https://www.figma.com/community/file/1231390020444406234/begonia-style-guide',
-    cta: 'Open in Figma',
+    title: 'Begonia Style Guide (Community) · Figma',
+    site: 'figma.com',
+    description: 'The source design. Inspect the frames, colors and text styles, or duplicate the file into your own drafts.',
+    logo: figma.url,
+    mesh: svgAsset('meshes', 'mesh-purple-sapphire').url,
   },
   {
-    icon: 'github-logo',
-    name: 'GitHub repository',
-    title: 'begonia-design-system',
-    text: 'The code for this site: Astro pages, the tokens file and the GitHub Pages workflow.',
     href: 'https://github.com/EltonCass/begonia-design-system',
-    cta: 'View the repository',
+    title: 'EltonCass/begonia-design-system · GitHub',
+    site: 'github.com',
+    description: 'The code for this site: Astro pages, the tokens file and the GitHub Pages workflow.',
+    logo: github.url,
+    mesh: svgAsset('meshes', 'mesh-blue-green').url,
   },
   {
-    icon: 'robot',
-    name: 'Claude design artifact',
-    title: 'Begonia design system',
-    text: 'The system as a Claude artifact: tokens, the brand book and components. Open it in Claude to design with Begonia.',
     href: 'https://claude.ai/artifact/DB8oxkPVmgqjuntzTZ34HG',
-    cta: 'Open the artifact',
+    title: 'Begonia design system · Claude',
+    site: 'claude.ai',
+    description: 'The system as a Claude artifact: tokens, the brand book and components. Open it in Claude to design with Begonia.',
+    logo: claude.url,
+    mesh: svgAsset('meshes', 'mesh-green-purple').url,
   },
 ];
 
@@ -64,13 +72,10 @@ h1, h2 { font-family: "Open Sans", sans-serif; font-weight: 600; }
 .ph-duotone::before { opacity: 0.25; }`,
 };
 
-const rules = [
-  'Dark is the default theme. Set data-theme="light" on a container for the light one.',
-  'Build with the semantic tokens first. Reach for the raw color scales for categories, charts and illustration.',
-  'One action color per screen: the accent marks the primary action, the current location and focus.',
-  'Open Sans for headings, Mosk for everything else.',
-  'Keep surfaces flat: tinted fills and 2px borders, with shadows only for things that float.',
-  'Icons are Phosphor Duotone only, and an icon-only button needs an accessible label.',
+const flow = [
+  { name: 'Figma file', text: 'The source of the design.' },
+  { name: 'Claude artifact', text: 'Keeps the tokens, the brand book and components.' },
+  { name: 'This site', text: 'Documents the tokens and copies them as CSS.' },
 ];
 ---
 
@@ -78,29 +83,15 @@ const rules = [
   <h1 class="visually-hidden">How to use</h1>
   <div class="canvas">
     <Sheet id="resources" icon="rocket-launch" title="Resources">
-      <ul class="resources">
-        {
-          resources.map((r) => (
-            <li>
-              <article class="resource">
-                <i class={`ph-duotone ph-${r.icon}`} aria-hidden="true"></i>
-                <p class="kind">{r.name}</p>
-                <h3 class="name">{r.title}</h3>
-                <p class="text">{r.text}</p>
-                <a class="btn" href={r.href} target="_blank" rel="noopener noreferrer">
-                  {r.cta}
-                  <i class="ph-duotone ph-arrow-up-right" aria-hidden="true"></i>
-                  <span class="visually-hidden">(opens in a new tab)</span>
-                </a>
-              </article>
-            </li>
-          ))
-        }
-      </ul>
+      <div class="column" data-theme="light">
+        <ul class="bookmarks">
+          {bookmarks.map((b) => <li><Bookmark {...b} /></li>)}
+        </ul>
+      </div>
     </Sheet>
 
     <Sheet id="how" icon="book-open-text" title="Quick start">
-      <ol class="steps">
+      <ol class="steps column">
         <li>
           <h3>Load the fonts and icons</h3>
           <p>
@@ -148,67 +139,40 @@ const rules = [
       </ol>
     </Sheet>
 
-    <Sheet id="rules" icon="intersect" title="How the pieces fit">
-      <div class="fit">
-        <p>
-          The <strong>Figma file</strong> is the source of the design. Its values are kept as tokens in the
-          <strong>Claude artifact</strong>, which also holds the brand book and components. This <strong>site</strong>
-          documents those tokens and lets you copy them straight into code.
+    <Sheet id="fit" icon="intersect" title="How the pieces fit">
+      <div class="column">
+        <ol class="flow">
+          {
+            flow.map((step, i) => (
+              <li>
+                <div class="node">
+                  <span class="mark">
+                    {i === 0 && <img src={figma.url} alt="" width="40" height="40" />}
+                    {i === 1 && <img src={claude.url} alt="" width="40" height="40" />}
+                    {i === 2 && <Logo size="44px" />}
+                  </span>
+                  <h3>{step.name}</h3>
+                  <p>{step.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <p class="summary">
+          Design in Figma, keep the values as tokens in the Claude artifact, then use this site to find a value and copy it
+          straight into code.
         </p>
-        <div>
-          <h3>Rules of thumb</h3>
-          <ul class="rules">
-            {rules.map((rule) => <li>{rule}</li>)}
-          </ul>
-        </div>
       </div>
     </Sheet>
   </div>
 </Layout>
 
 <style>
-  .resources {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: var(--space-6);
-  }
-  .resource {
-    display: grid;
-    gap: var(--space-2);
-    align-content: start;
-    height: 100%;
-    padding: var(--space-6);
-    background: var(--white-10);
-    border: 1px solid var(--black-30);
-    border-radius: 12px;
-  }
-  .resource > i { font-size: 40px; color: var(--mblue-40); }
-  .kind { margin-top: var(--space-2); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue-70); }
-  .name { font-size: 24px; font-weight: 600; }
-  .text { margin-bottom: var(--space-3); font-size: 15px; line-height: 1.5; color: var(--black-30); }
-  .btn {
-    justify-self: start;
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-5);
-    font-size: 16px;
-    font-weight: 600;
-    text-decoration: none;
-    color: var(--white-10);
-    background: var(--mblue-40);
-    border: 2px solid var(--mblue-40);
-    border-radius: var(--radius-sm);
-    transition: background-color 100ms;
-  }
-  .btn i { font-size: 22px; }
-  .btn:hover { background: var(--mblue-50); border-color: var(--mblue-50); }
+  .column { max-width: 960px; }
+  .bookmarks { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); color: var(--text); }
 
-  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-8); counter-reset: step; }
-  .steps > li { counter-increment: step; display: grid; gap: var(--space-2); max-width: 980px; }
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); counter-reset: step; }
+  .steps > li { counter-increment: step; display: grid; gap: var(--space-2); }
   .steps h3 { display: flex; align-items: center; gap: var(--space-3); font-size: 20px; font-weight: 600; }
   .steps h3::before {
     content: counter(step);
@@ -254,13 +218,31 @@ const rules = [
   pre { margin: 0; padding: var(--space-4); overflow-x: auto; font-size: 14px; line-height: 1.55; }
   pre code { font-size: inherit; }
 
-  .fit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-8) clamp(var(--space-8), 5vw, 96px); align-items: start; }
-  .fit > p { font-size: clamp(17px, 1.4vw, 22px); line-height: 1.5; color: var(--black-30); }
-  .fit h3 { margin-bottom: var(--space-3); font-size: 20px; font-weight: 600; }
-  .rules { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-2); font-size: 16px; line-height: 1.5; color: var(--black-30); }
+  /* Three steps, each leading to the next. */
+  .flow { list-style: none; margin: 0 0 var(--space-6); padding: 0; display: flex; align-items: stretch; gap: var(--space-4); }
+  .flow > li { flex: 1 1 0; display: flex; align-items: center; gap: var(--space-4); min-width: 0; }
+  .flow > li + li::before { content: '\2192' / ''; flex: none; font-size: 28px; line-height: 1; color: var(--black-20); }
+  .node {
+    flex: 1;
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    height: 100%;
+    padding: var(--space-5);
+    background: var(--white-10);
+    border: 1px solid var(--black-30);
+    border-radius: 12px;
+    min-width: 0;
+  }
+  .mark { display: grid; place-items: center; width: 56px; height: 56px; margin-bottom: var(--space-1); background: var(--white-50); border-radius: 12px; }
+  .mark img { width: 36px; height: 36px; object-fit: contain; }
+  .node h3 { font-size: 20px; font-weight: 600; }
+  .node p { font-size: 15px; line-height: 1.45; color: var(--black-30); }
+  .summary { max-width: 70ch; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.55; color: var(--black-30); }
 
-  @media (max-width: 1100px) {
-    .resources { grid-template-columns: minmax(0, 1fr); }
-    .fit { grid-template-columns: minmax(0, 1fr); }
+  @media (max-width: 800px) {
+    .flow { flex-direction: column; gap: var(--space-3); }
+    .flow > li { flex-direction: column; align-items: stretch; gap: var(--space-3); }
+    .flow > li + li::before { content: '\2193' / ''; align-self: center; }
   }
 </style>

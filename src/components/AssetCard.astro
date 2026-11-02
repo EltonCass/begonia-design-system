@@ -1,0 +1,68 @@
+---
+import type { SvgAsset } from '../lib/assets';
+
+interface Props {
+  asset: SvgAsset;
+  /** Visible name, also used in the button labels. */
+  name: string;
+  /** Alt text for the picture. */
+  alt: string;
+  /** "tile" fills the picture area (meshes); "mark" centers a small logo on a neutral ground. */
+  fit?: 'tile' | 'mark';
+}
+const { asset, name, alt, fit = 'tile' } = Astro.props;
+---
+
+<figure class="asset">
+  <div class:list={['picture', fit]}>
+    <img src={asset.url} alt={alt} loading="lazy" />
+  </div>
+  <figcaption>
+    <span class="name">{name}</span>
+    <span class="actions">
+      <a class="act" href={asset.url} download={asset.filename}>
+        <i class="ph-duotone ph-download-simple" aria-hidden="true"></i>
+        SVG<span class="visually-hidden"> download: {name}</span>
+      </a>
+      <button type="button" class="act copyable" data-copy={asset.raw}>
+        <i class="ph-duotone ph-copy" aria-hidden="true"></i>
+        Copy<span class="visually-hidden"> SVG code: {name}</span>
+      </button>
+    </span>
+  </figcaption>
+</figure>
+
+<style>
+  .asset { margin: 0; display: grid; gap: var(--space-3); align-content: start; min-width: 0; }
+  .picture { border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-md); }
+  .picture.tile img { display: block; width: 100%; aspect-ratio: 470 / 466; object-fit: cover; }
+  .picture.mark {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+    background: var(--white-50);
+    border: 1px solid var(--white-80);
+    box-shadow: none;
+  }
+  .picture.mark img { width: 40%; max-width: 96px; height: auto; max-height: 56%; object-fit: contain; }
+  figcaption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2); }
+  .name { font-size: 15px; font-weight: 600; }
+  .actions { display: inline-flex; gap: var(--space-2); }
+  .act {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 32px;
+    padding: 4px var(--space-3);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--mblue-40);
+    text-decoration: none;
+    background: var(--white-10);
+    border: 1px solid var(--mblue-40);
+    border-radius: 6px;
+  }
+  .act i { font-size: 16px; }
+  .act:hover { background: var(--mblue-40); color: var(--white-10); }
+</style>

@@ -34,7 +34,7 @@ const lines = [
   `  color-scheme: dark;`,
   ...dark,
   `}`,
-  `:root[data-theme='light'] {`,
+  `:root[data-theme='light'], [data-theme='light'] {`,
   `  color-scheme: light;`,
   ...light,
   `}`,

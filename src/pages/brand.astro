@@ -2,6 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import Sheet from '../components/Sheet.astro';
 import Logo from '../components/Logo.astro';
+import AssetCard from '../components/AssetCard.astro';
+import { svgAsset } from '../lib/assets';
+
+const logos = [
+  { file: 'figma', name: 'Figma' },
+  { file: 'github', name: 'GitHub' },
+  { file: 'linkedin', name: 'LinkedIn' },
+].map((l) => ({ ...l, asset: svgAsset('logos', l.file) }));
 ---
 
 <Layout title="Brand">
@@ -19,10 +27,64 @@ import Logo from '../components/Logo.astro';
         </div>
       </div>
     </Sheet>
+
+    <Sheet id="logos" icon="figma-logo" title="Logos">
+      <div class="logos">
+        {logos.map((l) => <AssetCard asset={l.asset} name={l.name} alt={`${l.name} logo`} fit="mark" />)}
+      </div>
+
+      <aside class="library" aria-labelledby="library-title">
+        <i class="ph-duotone ph-books" aria-hidden="true"></i>
+        <div>
+          <p class="eyebrow">Logo library</p>
+          <h3 id="library-title">SVG Logos</h3>
+          <p>
+            Brand logos in this system come from SVG Logos, a searchable library of logos as SVG. Find the mark you need
+            there, then add it to this page.
+          </p>
+        </div>
+        <a class="btn" href="https://svglogos.dev/" target="_blank" rel="noopener noreferrer">
+          Browse svglogos.dev<i class="ph-duotone ph-arrow-up-right" aria-hidden="true"></i>
+          <span class="visually-hidden">(opens in a new tab)</span>
+        </a>
+      </aside>
+    </Sheet>
   </div>
 </Layout>
 
 <style>
+  .logos { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 260px)); gap: var(--space-6); }
+  .library {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-5);
+    margin-top: var(--space-8);
+    padding: var(--space-5) var(--space-6);
+    background: linear-gradient(135deg, var(--blue-10), var(--white-10) 70%);
+    border: 1px solid var(--blue-20);
+    border-radius: 12px;
+  }
+  .library > i { font-size: 40px; color: var(--mblue-40); }
+  .library > div { flex: 1 1 320px; display: grid; gap: var(--space-1); }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-70); }
+  .library h3 { font-size: 24px; font-weight: 600; }
+  .library p:not(.eyebrow) { max-width: 60ch; font-size: 15px; line-height: 1.5; color: var(--black-30); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--white-10);
+    text-decoration: none;
+    background: var(--mblue-40);
+    border: 2px solid var(--mblue-40);
+    border-radius: var(--radius-sm);
+  }
+  .btn i { font-size: 22px; }
+  .btn:hover { background: var(--mblue-50); border-color: var(--mblue-50); }
   .group {
     display: flex;
     align-items: center;

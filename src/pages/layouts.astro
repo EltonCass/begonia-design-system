@@ -47,12 +47,13 @@ const offsetCss = (n: number) =>
         }
 
         {
-          [0, 1].map((i) => (
-            <section class="spec">
+          [16, 32].map((n) => (
+            <section class="spec" style={`--n: ${n}px`}>
               <h3><i class="ph-duotone ph-user-circle" aria-hidden="true"></i>Use</h3>
-              <article class={`use ${i ? 'wide' : ''}`}>
-                <p class="chapter">Chapter 1: Great Mornings</p>
-                <p class="sub">Lucid Dream</p>
+              <p class="use-spec">Offset {n} / Auto Column {n} width / Auto Row {n} height</p>
+              <article class="use">
+                <h4 class="chapter">Chapter 1: Great Mornings</h4>
+                <h5 class="sub">Lucid Dream</h5>
                 <p class="cols">{samsa}</p>
               </article>
             </section>
@@ -99,17 +100,24 @@ const offsetCss = (n: number) =>
     background-size: 100% 100%;
   }
 
-  .use { display: grid; gap: var(--space-3); font-family: var(--font-display); }
-  .chapter { font-size: clamp(22px, 1.8vw, 28px); }
-  .sub { font-size: clamp(18px, 1.4vw, 22px); padding-left: var(--space-8); }
-  .cols { column-count: 2; column-gap: var(--space-8); padding-left: var(--space-8); font-size: 14px; line-height: 1.45; }
-  .wide .cols { column-gap: var(--space-4); }
+  .use-spec { margin: calc(var(--space-2) * -1) 0 var(--space-3); font-size: 14px; color: var(--black-20); }
+  /* The padding, the row gap and the column gap all use the same offset. */
+  .use {
+    display: grid;
+    gap: var(--n);
+    padding: var(--n);
+    font-family: var(--font-display);
+    outline: 1px dashed var(--bsapphire-30);
+    outline-offset: -1px;
+  }
+  .chapter { font-size: clamp(22px, 1.8vw, 28px); font-weight: 400; }
+  .sub { font-size: clamp(18px, 1.4vw, 22px); font-weight: 400; }
+  .cols { column-count: 2; column-gap: var(--n); font-size: 14px; line-height: 1.45; }
 
   @media (max-width: 900px) {
     .board { grid-template-columns: minmax(0, 1fr); }
   }
   @media (max-width: 560px) {
-    .cols { column-count: 1; padding-left: 0; }
-    .sub { padding-left: 0; }
+    .cols { column-count: 1; }
   }
 </style>
