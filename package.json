@@ -18,7 +18,7 @@
     "@phosphor-icons/core": "^2.1.1",
     "@phosphor-icons/web": "^2.1.2",
     "astro": "^7.4.4",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.2"
   },
   "devDependencies": {
     "sharp": "^0.35.5"
