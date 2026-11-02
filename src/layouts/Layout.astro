@@ -12,7 +12,7 @@ interface Props {
 
 const {
   title,
-  description = 'Begonia style guide: color, typography, spacing, brand, shadows, borders, layouts and iconography.',
+  description = 'Begonia style guide: color, typography, spacing, brand, shadows, borders, layouts, iconography and how to use it.',
   tone = 'light',
 } = Astro.props;
 const fullTitle = title === 'Begonia' ? 'Begonia Style Guide' : `${title} · Begonia`;
@@ -25,23 +25,25 @@ const fullTitle = title === 'Begonia' ? 'Begonia Style Guide' : `${title} · Beg
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
-    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.ico`} sizes="32x32" />
     <ClientRouter />
   </head>
   <body class={tone}>
     <a class="skip" href="#main">Skip to content</a>
     <Header />
-    <main id="main" transition:name="main">
+    <!-- main is the scroll container, so the scrollbar sits below the header. -->
+    <main id="main" tabindex="0" transition:name="main">
+      <span id="copy-hint" class="visually-hidden">Press Enter to copy its CSS to the clipboard.</span>
       <slot />
     </main>
-    <div id="toast" class="toast" role="status" aria-live="polite" transition:persist></div>
+    <div id="toast" class="visually-hidden" role="status" aria-live="polite" transition:persist></div>
   </body>
 </html>
 
 <script>
-  // Direction of a page change follows the tab order: a tab further along slides in from the right.
   let direction = 'forward';
 
+  // Direction of a page change follows the tab order: a tab further along slides in from the right.
   document.addEventListener('astro:before-preparation', (event) => {
     const paths = [...document.querySelectorAll<HTMLAnchorElement>('#site-nav a')].map((a) => new URL(a.href).pathname);
     const from = paths.indexOf(event.from.pathname);
@@ -55,8 +57,15 @@ const fullTitle = title === 'Begonia' ? 'Begonia Style Guide' : `${title} · Beg
     document.documentElement.dataset.dir = direction;
   });
 
-  // Anything with data-copy copies its value (CSS) to the clipboard.
-  let timer: number | undefined;
+  // Copy buttons keep their visible text as the name and get the how-to as a description.
+  document.addEventListener('astro:page-load', () => {
+    document.querySelectorAll<HTMLElement>('[data-copy]').forEach((el) => {
+      const target = el.tagName === 'TR' ? el.querySelector('button') : el;
+      target?.setAttribute('aria-describedby', 'copy-hint');
+    });
+  });
+
+  let announceTimer: number | undefined;
 
   async function copy(el: HTMLElement) {
     const text = el.dataset.copy ?? '';
@@ -73,21 +82,28 @@ const fullTitle = title === 'Begonia' ? 'Begonia Style Guide' : `${title} · Beg
       area.remove();
     }
 
-    el.classList.remove('copied');
-    void el.offsetWidth;
-    el.classList.add('copied');
+    // A translucent "Copied" overlay fades in over the card, then out.
+    el.querySelector(':scope > .copy-overlay')?.remove();
+    const overlay = document.createElement('span');
+    overlay.className = 'copy-overlay';
+    overlay.setAttribute('aria-hidden', 'true');
+    const inner = document.createElement('span');
+    const icon = document.createElement('i');
+    icon.className = 'ph-duotone ph-check-circle';
+    inner.append(icon);
+    // Small targets (icons, logos) only have room for the check mark.
+    if (el.offsetWidth >= 84) inner.append(' Copied');
+    overlay.append(inner);
+    el.append(overlay);
+    overlay.addEventListener('animationend', () => overlay.remove());
 
-    const toast = document.getElementById('toast');
-    if (!toast) return;
-    toast.replaceChildren();
-    const label = document.createElement('strong');
-    label.textContent = 'Copied';
-    const code = document.createElement('code');
-    code.textContent = text.split('\n')[0];
-    toast.append(label, code);
-    toast.dataset.show = 'true';
-    window.clearTimeout(timer);
-    timer = window.setTimeout(() => (toast.dataset.show = 'false'), 1800);
+    // Screen readers hear it through the live region.
+    const live = document.getElementById('toast');
+    if (live) {
+      live.textContent = `Copied ${text.split('\n')[0]}`;
+      window.clearTimeout(announceTimer);
+      announceTimer = window.setTimeout(() => (live.textContent = ''), 2500);
+    }
   }
 
   document.addEventListener('click', (event) => {
@@ -119,5 +135,5 @@ const fullTitle = title === 'Begonia' ? 'Begonia Style Guide' : `${title} · Beg
   }
   .skip:focus { top: var(--space-2); }
 
-  .canvas { padding-bottom: var(--space-24); }
+  .canvas { padding-bottom: var(--space-12); }
 </style>

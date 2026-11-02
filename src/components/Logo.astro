@@ -8,8 +8,10 @@ interface Props {
   class?: string;
   /** Load immediately: for marks above the fold, like the header. */
   eager?: boolean;
+  /** Describe the mark, or leave empty when it is decorative. */
+  alt?: string;
 }
-const { size = '100%', class: className, eager = false } = Astro.props;
+const { size = '100%', class: className, eager = false, alt = '' } = Astro.props;
 ---
 
 <!--
@@ -17,7 +19,7 @@ const { size = '100%', class: className, eager = false } = Astro.props;
   The wrapper is the circle; the image is positioned to match that mask.
 -->
 <div class:list={['logo', className]} style={`--size: ${size}`}>
-  <Image src={flower} alt="" width={902} height={883} widths={[200, 480, 902]} sizes="(max-width: 700px) 90vw, 920px" loading={eager ? 'eager' : 'lazy'} />
+  <Image src={flower} alt={alt} width={902} height={883} widths={[200, 480, 902]} sizes="(max-width: 700px) 90vw, 920px" loading={eager ? 'eager' : 'lazy'} />
 </div>
 
 <style>

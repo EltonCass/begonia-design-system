@@ -15,7 +15,7 @@ const offsetCss = (n: number) =>
 <Layout title="Layouts">
   <h1 class="visually-hidden">Layouts</h1>
   <div class="canvas">
-    <Sheet id="layouts" icon="layout" title="Layouts" rule="var(--bsapphire-30)" hint>
+    <Sheet id="layouts" icon="layout" title="Layouts" hint>
       <div class="board">
         {
           offsets.map((n) => (
@@ -67,7 +67,7 @@ const offsetCss = (n: number) =>
   .board {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-10) clamp(var(--space-6), 6vw, 110px);
+    gap: var(--space-8) clamp(var(--space-6), 6vw, 110px);
   }
   .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
   .spec h3 {

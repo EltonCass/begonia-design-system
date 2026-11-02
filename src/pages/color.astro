@@ -18,14 +18,14 @@ const slug = (n: string) => n.toLowerCase();
 <Layout title="Color">
   <h1 class="visually-hidden">Color</h1>
   <div class="canvas">
-    <Sheet id="palette" icon="palette" title="Color palette" rule="var(--red-60)" hint>
+    <Sheet id="palette" icon="palette" title="Color palette" hint>
       <div class="cards">
         {order.map((family) => <ColorCard family={family} />)}
         <AlphaCard />
       </div>
     </Sheet>
 
-    <Sheet id="gradients" icon="palette" title="Gradients" rule="var(--red-60)" hint>
+    <Sheet id="gradients" icon="palette" title="Gradients" hint>
       <div class="groups">
         <section>
           <h3 class="group"><i class="ph-duotone ph-paint-brush" aria-hidden="true"></i>Dark Color</h3>
@@ -67,7 +67,7 @@ const slug = (n: string) => n.toLowerCase();
     .cards { grid-template-columns: minmax(0, 1fr); }
   }
 
-  .groups { display: grid; gap: var(--space-8); }
+  .groups { display: grid; gap: var(--space-6); }
   .group {
     display: flex;
     align-items: center;

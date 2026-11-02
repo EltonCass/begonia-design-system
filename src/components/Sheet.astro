@@ -3,16 +3,14 @@ interface Props {
   /** Phosphor icon name, e.g. "palette". */
   icon: string;
   title: string;
-  /** CSS color of the rule under the header. Each Figma sheet has its own. */
-  rule: string;
   id?: string;
   /** Show the "click to copy" hint above the content. */
   hint?: boolean;
 }
-const { icon, title, rule, id, hint = false } = Astro.props;
+const { icon, title, id, hint = false } = Astro.props;
 ---
 
-<section class="sheet" id={id} style={`--rule: ${rule}`} aria-labelledby={id ? `${id}-title` : undefined}>
+<section class="sheet" id={id} aria-labelledby={id ? `${id}-title` : undefined}>
   <header class="head">
     <div class="container inner">
       <h2 class="title" id={id ? `${id}-title` : undefined}>
@@ -39,9 +37,8 @@ const { icon, title, rule, id, hint = false } = Astro.props;
     color: var(--black-50);
     font-family: var(--font-display);
   }
-  .sheet + .sheet { margin-top: var(--space-16); }
-  .head { border-bottom: clamp(2px, 0.2vw, 4px) solid var(--rule); }
-  .inner { display: flex; align-items: center; min-height: clamp(64px, 5.8vw, 112px); }
+  .sheet + .sheet { margin-top: var(--space-6); }
+  .inner { display: flex; align-items: center; min-height: clamp(56px, 4.2vw, 80px); }
   .title {
     display: flex;
     align-items: center;
@@ -53,12 +50,12 @@ const { icon, title, rule, id, hint = false } = Astro.props;
     text-shadow: 0 4px 8px rgba(2, 27, 39, 0.1), 0 10px 17px rgba(2, 27, 39, 0.1);
   }
   .title i { font-size: 1.35em; }
-  .body { padding-block: clamp(var(--space-6), 3.4vw, 64px); }
+  .body { padding-block: var(--space-2) clamp(var(--space-4), 2vw, 32px); }
   .hint {
     display: flex;
     align-items: center;
     gap: var(--space-2);
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-4);
     font-size: 14px;
     color: var(--black-20);
   }

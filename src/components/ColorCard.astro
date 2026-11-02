@@ -102,9 +102,11 @@ const inverse = family === 'white';
   .var-step { font-size: 14px; line-height: 1.25; letter-spacing: 0.01em; }
   .mono { font-family: 'Roboto', sans-serif; font-size: 12px; line-height: 1.25; white-space: nowrap; }
 
-  /* Narrow cards: two variations per row, and stack the codes. */
-  @container (max-width: 560px) {
+  /* Four variations per row need about 760px; below that, two per row. */
+  @container (max-width: 760px) {
     .row { grid-template-columns: repeat(2, 1fr); gap: 8px 0; }
+  }
+  @container (max-width: 560px) {
     .codes { grid-template-columns: 1fr; flex-basis: 100%; max-width: none; padding-block: 8px; }
     .codes.t-h3 { font-size: 16px; }
   }

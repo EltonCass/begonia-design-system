@@ -16,20 +16,21 @@ const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7
 <Layout title="Spacing">
   <h1 class="visually-hidden">Spacing</h1>
   <div class="canvas">
-    <Sheet id="spacing" icon="table" title="Spacing" rule="var(--mbrown-70)" hint>
+    <Sheet id="spacing" icon="table" title="Spacing" hint>
       <div class="layout">
         <div class="scale">
           <table>
+            <caption class="visually-hidden">Spacing scale: name, size in rem and size in pixels. Select a row to copy its CSS.</caption>
             <thead>
-              <tr><th>Name</th><th>Size</th><th>Pixels</th><th class="visually-hidden">Preview</th></tr>
+              <tr><th scope="col">Name</th><th scope="col">Size</th><th scope="col">Pixels</th><th scope="col"><span class="visually-hidden">Preview</span></th></tr>
             </thead>
             <tbody>
               {steps.map((s) => (
                 <tr class="copyable" title="Click to copy CSS" data-copy={`--space-${s.name.replace('.', '_')}: ${s.rem}; /* ${s.px}px */`}>
-                  <td><button type="button" class="rowbtn">{s.name}</button></td>
+                  <td><button type="button" class="rowbtn" aria-label={`Copy spacing ${s.name}, ${s.px} pixels`}>{s.name}</button></td>
                   <td>{s.rem}</td>
                   <td>{s.px}px</td>
-                  <td class="barcell">{s.px > 0 && <span class="bar" style={`width: ${s.px}px`}></span>}</td>
+                  <td class="barcell">{s.px > 0 && <span class="bar" aria-hidden="true" style={`width: ${s.px}px`}></span>}</td>
                 </tr>
               ))}
             </tbody>

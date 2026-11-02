@@ -1,0 +1,266 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sheet from '../components/Sheet.astro';
+import tokens from '../data/tokens.json';
+import { tok } from '../lib/css';
+
+const base = import.meta.env.BASE_URL;
+
+const resources = [
+  {
+    icon: 'figma-logo',
+    name: 'Figma Community file',
+    title: 'Begonia style guide',
+    text: 'The source design. Inspect the frames, colors and text styles, or duplicate the file into your own drafts.',
+    href: 'https://www.figma.com/community/file/1231390020444406234/begonia-style-guide',
+    cta: 'Open in Figma',
+  },
+  {
+    icon: 'github-logo',
+    name: 'GitHub repository',
+    title: 'begonia-design-system',
+    text: 'The code for this site: Astro pages, the tokens file and the GitHub Pages workflow.',
+    href: 'https://github.com/EltonCass/begonia-design-system',
+    cta: 'View the repository',
+  },
+  {
+    icon: 'robot',
+    name: 'Claude design artifact',
+    title: 'Begonia design system',
+    text: 'The system as a Claude artifact: tokens, the brand book and components. Open it in Claude to design with Begonia.',
+    href: 'https://claude.ai/artifact/DB8oxkPVmgqjuntzTZ34HG',
+    cta: 'Open the artifact',
+  },
+];
+
+// Semantic tokens for both themes, resolved from tokens.json so the snippet never drifts.
+const semantic = ['bg', 'text', 'text-muted', 'accent', 'card-bg', 'card-border'];
+const resolve = (value: string) => (value.startsWith('{') ? tok(value.slice(1, -1)) : value);
+const themeVars = (theme: 'dark' | 'light') =>
+  semantic
+    .map((name) => {
+      const t = tokens.color.tokens.find((x) => x.name === name)!;
+      const v = t.value as Record<string, string>;
+      return `  --${name}: ${resolve(v[theme])};`;
+    })
+    .join('\n');
+
+const snippets = {
+  head: `<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/duotone/style.css">`,
+  tokens: `:root {\n${themeVars('dark')}\n}\n\n:root[data-theme='light'] {\n${themeVars('light')}\n}`,
+  base: `body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Mosk", "Open Sans", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+h1, h2 { font-family: "Open Sans", sans-serif; font-weight: 600; }
+
+/* Phosphor's back layer is 20%; Begonia uses 25%. */
+.ph-duotone::before { opacity: 0.25; }`,
+};
+
+const rules = [
+  'Dark is the default theme. Set data-theme="light" on a container for the light one.',
+  'Build with the semantic tokens first. Reach for the raw color scales for categories, charts and illustration.',
+  'One action color per screen: the accent marks the primary action, the current location and focus.',
+  'Open Sans for headings, Mosk for everything else.',
+  'Keep surfaces flat: tinted fills and 2px borders, with shadows only for things that float.',
+  'Icons are Phosphor Duotone only, and an icon-only button needs an accessible label.',
+];
+---
+
+<Layout title="How to use">
+  <h1 class="visually-hidden">How to use</h1>
+  <div class="canvas">
+    <Sheet id="resources" icon="rocket-launch" title="Resources">
+      <ul class="resources">
+        {
+          resources.map((r) => (
+            <li>
+              <article class="resource">
+                <i class={`ph-duotone ph-${r.icon}`} aria-hidden="true"></i>
+                <p class="kind">{r.name}</p>
+                <h3 class="name">{r.title}</h3>
+                <p class="text">{r.text}</p>
+                <a class="btn" href={r.href} target="_blank" rel="noopener noreferrer">
+                  {r.cta}
+                  <i class="ph-duotone ph-arrow-up-right" aria-hidden="true"></i>
+                  <span class="visually-hidden">(opens in a new tab)</span>
+                </a>
+              </article>
+            </li>
+          ))
+        }
+      </ul>
+    </Sheet>
+
+    <Sheet id="how" icon="book-open-text" title="Quick start">
+      <ol class="steps">
+        <li>
+          <h3>Load the fonts and icons</h3>
+          <p>
+            Open Sans and the Phosphor duotone icons load from a CDN. Mosk is not on Google Fonts: download it from the{' '}
+            <a href={`${base}typography/`}>Typography page</a> and add it with <code>@font-face</code>.
+          </p>
+          <figure class="snippet">
+            <figcaption>
+              <span>HTML</span>
+              <button type="button" class="copy-btn copyable" data-copy={snippets.head}>
+                <i class="ph-duotone ph-copy" aria-hidden="true"></i>Copy<span class="visually-hidden"> HTML snippet</span>
+              </button>
+            </figcaption>
+            <pre tabindex="0"><code>{snippets.head}</code></pre>
+          </figure>
+        </li>
+        <li>
+          <h3>Add the tokens</h3>
+          <p>
+            The semantic tokens below come from <code>tokens.json</code>, the same file this site is built from. Every card on
+            the other pages copies its own value when you click it.
+          </p>
+          <figure class="snippet">
+            <figcaption>
+              <span>CSS</span>
+              <button type="button" class="copy-btn copyable" data-copy={snippets.tokens}>
+                <i class="ph-duotone ph-copy" aria-hidden="true"></i>Copy<span class="visually-hidden"> theme tokens</span>
+              </button>
+            </figcaption>
+            <pre tabindex="0"><code>{snippets.tokens}</code></pre>
+          </figure>
+        </li>
+        <li>
+          <h3>Set the base styles</h3>
+          <figure class="snippet">
+            <figcaption>
+              <span>CSS</span>
+              <button type="button" class="copy-btn copyable" data-copy={snippets.base}>
+                <i class="ph-duotone ph-copy" aria-hidden="true"></i>Copy<span class="visually-hidden"> base styles</span>
+              </button>
+            </figcaption>
+            <pre tabindex="0"><code>{snippets.base}</code></pre>
+          </figure>
+        </li>
+      </ol>
+    </Sheet>
+
+    <Sheet id="rules" icon="intersect" title="How the pieces fit">
+      <div class="fit">
+        <p>
+          The <strong>Figma file</strong> is the source of the design. Its values are kept as tokens in the
+          <strong>Claude artifact</strong>, which also holds the brand book and components. This <strong>site</strong>
+          documents those tokens and lets you copy them straight into code.
+        </p>
+        <div>
+          <h3>Rules of thumb</h3>
+          <ul class="rules">
+            {rules.map((rule) => <li>{rule}</li>)}
+          </ul>
+        </div>
+      </div>
+    </Sheet>
+  </div>
+</Layout>
+
+<style>
+  .resources {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6);
+  }
+  .resource {
+    display: grid;
+    gap: var(--space-2);
+    align-content: start;
+    height: 100%;
+    padding: var(--space-6);
+    background: var(--white-10);
+    border: 1px solid var(--black-30);
+    border-radius: 12px;
+  }
+  .resource > i { font-size: 40px; color: var(--mblue-40); }
+  .kind { margin-top: var(--space-2); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--blue-70); }
+  .name { font-size: 24px; font-weight: 600; }
+  .text { margin-bottom: var(--space-3); font-size: 15px; line-height: 1.5; color: var(--black-30); }
+  .btn {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-5);
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--white-10);
+    background: var(--mblue-40);
+    border: 2px solid var(--mblue-40);
+    border-radius: var(--radius-sm);
+    transition: background-color 100ms;
+  }
+  .btn i { font-size: 22px; }
+  .btn:hover { background: var(--mblue-50); border-color: var(--mblue-50); }
+
+  .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-8); counter-reset: step; }
+  .steps > li { counter-increment: step; display: grid; gap: var(--space-2); max-width: 980px; }
+  .steps h3 { display: flex; align-items: center; gap: var(--space-3); font-size: 20px; font-weight: 600; }
+  .steps h3::before {
+    content: counter(step);
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    flex: none;
+    font-size: 16px;
+    color: var(--white-10);
+    background: var(--black-50);
+    border-radius: 50%;
+  }
+  .steps p { font-size: 16px; line-height: 1.5; color: var(--black-30); }
+  .steps a { color: var(--blue-70); }
+  code { font-family: ui-monospace, Consolas, monospace; font-size: 0.92em; }
+
+  .snippet { margin: var(--space-2) 0 0; background: var(--black-40); color: var(--white-10); border-radius: 8px; overflow: hidden; }
+  figcaption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    background: rgba(255, 255, 255, 0.08);
+  }
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--white-10);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 6px;
+    min-height: 36px;
+  }
+  .copy-btn i { font-size: 18px; }
+  .copy-btn:hover { background: rgba(255, 255, 255, 0.12); }
+  pre { margin: 0; padding: var(--space-4); overflow-x: auto; font-size: 14px; line-height: 1.55; }
+  pre code { font-size: inherit; }
+
+  .fit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-8) clamp(var(--space-8), 5vw, 96px); align-items: start; }
+  .fit > p { font-size: clamp(17px, 1.4vw, 22px); line-height: 1.5; color: var(--black-30); }
+  .fit h3 { margin-bottom: var(--space-3); font-size: 20px; font-weight: 600; }
+  .rules { margin: 0; padding-left: var(--space-5); display: grid; gap: var(--space-2); font-size: 16px; line-height: 1.5; color: var(--black-30); }
+
+  @media (max-width: 1100px) {
+    .resources { grid-template-columns: minmax(0, 1fr); }
+    .fit { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

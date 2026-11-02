@@ -50,7 +50,7 @@ const headings = ['h1', 'h2', 'h3', 'h4', 'h5'];
 <Layout title="Typography">
   <h1 class="visually-hidden">Typography</h1>
   <div class="canvas">
-    <Sheet id="font-families" icon="pen-nib" title="Font families" rule="var(--blue-70)" hint>
+    <Sheet id="font-families" icon="pen-nib" title="Font families" hint>
       <section class="get" aria-labelledby="get-fonts">
         <h3 id="get-fonts" class="get-title"><i class="ph-duotone ph-download-simple" aria-hidden="true"></i>Get the fonts</h3>
         <div class="sources">
@@ -79,14 +79,14 @@ const headings = ['h1', 'h2', 'h3', 'h4', 'h5'];
               letterforms.
             </p>
           </div>
-          <ul class="specimens">
+          <div class="specimens">
             {openSans.map((s) => (
-              <li class="specimen copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={s.copy}>
+              <div class="specimen copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={s.copy}>
                 <div class="tag"><span class="fam" style={s.css}>{s.name}</span><span class="wt">{s.weight}</span></div>
                 <p class="sample" style={`${s.css}; font-size: 14px; line-height: 1.3`}>{peep}</p>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
 
         <div class="family">
@@ -99,19 +99,19 @@ const headings = ['h1', 'h2', 'h3', 'h4', 'h5'];
               contemporary feel.
             </p>
           </div>
-          <ul class="specimens">
+          <div class="specimens">
             {mosk.map((s) => (
-              <li class="specimen copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={s.copy}>
+              <div class="specimen copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={s.copy}>
                 <div class="tag"><span class="fam" style={s.css}>{s.name}</span><span class="wt" style={s.css}>{s.weight}</span></div>
                 <p class="sample" style={`${s.css}; font-size: 14px; line-height: 1.3`}>{peep}</p>
-              </li>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
       </div>
     </Sheet>
 
-    <Sheet id="font-sizes" icon="pen-nib" title="Font sizes" rule="var(--blue-70)" hint>
+    <Sheet id="font-sizes" icon="pen-nib" title="Font sizes" hint>
       <div class="sizes">
         <section>
           <h3 class="col-title"><i class="ph-duotone ph-text-h-one" aria-hidden="true"></i>Headings</h3>
@@ -134,7 +134,7 @@ const headings = ['h1', 'h2', 'h3', 'h4', 'h5'];
           <div class="item copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={typeCss('b2')}><p class="item-label">Body 2 / b2 /span</p><p class="demo t-b2">{peep}</p></div>
           <div class="item copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={typeCss('b2', ['color: #2576A9;', 'text-decoration: underline;'])}><p class="item-label">Anchor a</p><p class="demo t-b2 anchor">{peep}</p></div>
           <div class="item copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={typeCss('content-italic')}><p class="item-label">Content Italic</p><p class="demo t-content-italic">{peep}</p></div>
-          <div class="item copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={typeCss('label', ['color: #B2B7BA;'])}><p class="item-label">PlaceHolder</p><p class="demo t-label placeholder">{peep}</p></div>
+          <div class="item copyable" role="button" tabindex="0" title="Click to copy CSS" data-copy={typeCss('label', ['color: #717171;'])}><p class="item-label">PlaceHolder</p><p class="demo t-label placeholder">{peep}</p></div>
         </section>
 
         <section>
@@ -178,7 +178,7 @@ const headings = ['h1', 'h2', 'h3', 'h4', 'h5'];
 </Layout>
 
 <style>
-  .get { margin-bottom: var(--space-12); }
+  .get { margin-bottom: var(--space-8); }
   .get-title { display: flex; align-items: center; gap: var(--space-3); margin-bottom: var(--space-5); font-size: 22px; font-weight: 400; text-transform: uppercase; }
   .get-title i { font-size: 30px; }
   .sources { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-6); }
@@ -190,7 +190,7 @@ const headings = ['h1', 'h2', 'h3', 'h4', 'h5'];
   .source-links a { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; color: var(--blue-70); }
   .source-links i { font-size: 18px; }
 
-  .families { display: grid; gap: var(--space-10); }
+  .families { display: grid; gap: var(--space-8); }
   .family {
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 8fr);
@@ -230,15 +230,16 @@ const headings = ['h1', 'h2', 'h3', 'h4', 'h5'];
   .wt { font-size: 12px; font-family: var(--font-display); }
   .sample { align-self: center; padding: var(--space-3) var(--space-4); }
 
-  .sizes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-10) clamp(var(--space-6), 3vw, 56px); }
+  .sizes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-8) clamp(var(--space-6), 3vw, 56px); }
   .col-title { display: flex; align-items: center; gap: var(--space-3); font-size: 22px; font-weight: 400; margin-bottom: var(--space-6); }
   .col-title i { font-size: 30px; }
-  .item { margin-bottom: var(--space-5); }
+  .item { margin-bottom: var(--space-3); }
   .item-label { font-size: 20px; line-height: 1.3; margin-bottom: var(--space-3); }
   .demo { text-align: center; color: var(--black-30); display: grid; gap: var(--space-2); }
   .up { text-transform: uppercase; }
   .anchor { color: var(--blue-70); }
-  .placeholder { color: var(--gray-40); }
+  /* Figma's placeholder gray is 1.9:1 on white; black-10 keeps the specimen readable (4.7:1). */
+  .placeholder { color: var(--black-10); }
   .use { display: grid; gap: var(--space-3); padding-left: var(--space-2); color: var(--black-30); }
   .use-title { font-size: 22px; font-weight: 400; color: var(--black-20); margin-bottom: var(--space-2); }
 

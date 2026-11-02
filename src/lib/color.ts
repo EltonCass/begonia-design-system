@@ -32,9 +32,12 @@ export function luminance(hex: string): number {
   return 0.2126 * lin((n >> 16) & 255) + 0.7152 * lin((n >> 8) & 255) + 0.0722 * lin(n & 255);
 }
 
-/** Readable ink for a given ground, the better of the two Figma text colours. */
+const contrast = (a: number, b: number) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+
+/** The better-contrasting of Figma's two text colours on a ground (WCAG contrast ratio). */
 export function inkOn(hex: string): string {
-  return luminance(hex) > 0.35 ? '#1c1c1c' : '#f5f5f5';
+  const ground = luminance(hex);
+  return contrast(ground, luminance('#1c1c1c')) >= contrast(ground, luminance('#f5f5f5')) ? '#1c1c1c' : '#f5f5f5';
 }
 
 export function palette(family: string): Swatch[] {

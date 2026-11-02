@@ -16,11 +16,14 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html { -webkit-text-size-adjust: 100%; height: 100%; }
 
+/* App shell: the header stays put and only <main> scrolls. */
 body {
   margin: 0;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background: var(--bg);
@@ -31,7 +34,8 @@ body {
   font-weight: 400;
 }
 
-main { flex: 1; }
+main { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+main:focus-visible { outline-offset: -3px; }
 
 h1, h2, h3, h4, h5, p { margin: 0; }
 img, svg { display: block; max-width: 100%; }
@@ -62,39 +66,42 @@ a:hover { text-decoration-thickness: 2px; }
 body.light { background: var(--white-10); color: var(--black-50); }
 
 /* Click to copy CSS */
-.copyable { cursor: pointer; }
+.copyable { position: relative; cursor: pointer; }
 .copyable:hover { outline: 2px solid var(--mblue-30); outline-offset: 2px; }
 .copyable:focus-visible { outline: 2px solid var(--mblue-30); outline-offset: 3px; }
 button.copyable { font: inherit; color: inherit; background: none; border: 0; padding: 0; }
-.copied { animation: begonia-copied 700ms ease-out; }
-@keyframes begonia-copied {
-  0% { outline: 3px solid var(--green-30); outline-offset: 2px; }
-  100% { outline: 3px solid transparent; outline-offset: 8px; }
-}
 
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: var(--space-6);
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  max-width: min(92vw, 560px);
-  padding: var(--space-3) var(--space-5);
-  background: var(--black-40);
+/* Focus rings need 3:1 against the page: teal on the dark cover, strong blue on the light pages. */
+body.light :focus-visible, body.light .copyable:focus-visible { outline-color: var(--mblue-40); }
+body.light main { scrollbar-color: rgba(28, 28, 28, 0.45) transparent; }
+
+/* "Copied" confirmation: a translucent overlay fades in over the card and out again. */
+.copy-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: rgba(2, 27, 39, 0.86);
   color: var(--white-10);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-xl);
-  font-size: 14px;
-  transform: translate(-50%, 16px);
-  opacity: 0;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
   pointer-events: none;
-  transition: opacity 150ms, transform 150ms;
+  opacity: 0;
+  animation: begonia-overlay 1100ms ease both;
 }
-.toast[data-show='true'] { opacity: 1; transform: translate(-50%, 0); }
-.toast strong { color: var(--green-10); font-weight: 600; }
-.toast code { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: ui-monospace, Consolas, monospace; }
+.copy-overlay > span { display: inline-flex; align-items: center; gap: 6px; }
+.copy-overlay i { font-size: 22px; color: var(--green-10); }
+@keyframes begonia-overlay {
+  0% { opacity: 0; }
+  14% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { opacity: 0; }
+}
 
 /* Page changes slide in the direction of travel along the tab order. */
 ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
@@ -109,6 +116,4 @@ button.copyable { font: inherit; color: inherit; background: none; border: 0; pa
 
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
-  .copied { animation: none; }
-  html { scroll-behavior: auto; }
 }

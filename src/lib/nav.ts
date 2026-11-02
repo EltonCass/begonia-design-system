@@ -7,4 +7,5 @@ export const tabs = [
   { href: 'shadows-borders/', label: 'Shadows & borders', icon: 'intersect' },
   { href: 'layouts/', label: 'Layouts', icon: 'layout' },
   { href: 'iconography/', label: 'Iconography', icon: 'image-square' },
+  { href: 'how-to-use/', label: 'How to use', icon: 'rocket-launch' },
 ] as const;

@@ -8,10 +8,11 @@ const here = Astro.url.pathname;
 
 <header class="header" transition:persist>
   <div class="container bar">
-    <a class="home" href={base} aria-label="Begonia style guide, home">
+    <a class="home" href={base}>
       <Logo size="40px" eager />
       <span class="name">Begonia</span>
       <span class="badge">v1.0</span>
+      <span class="visually-hidden">style guide home</span>
     </a>
 
     <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
@@ -49,6 +50,14 @@ const here = Astro.url.pathname;
 
     if (!menuBtn.dataset.bound) {
       menuBtn.dataset.bound = 'true';
+      // Escape closes the open menu and hands focus back to its button.
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && menuBtn.getAttribute('aria-expanded') === 'true') {
+          menuBtn.setAttribute('aria-expanded', 'false');
+          nav.dataset.open = 'false';
+          menuBtn.focus();
+        }
+      });
       menuBtn.addEventListener('click', () => {
         const open = menuBtn.getAttribute('aria-expanded') === 'true';
         menuBtn.setAttribute('aria-expanded', String(!open));
@@ -60,9 +69,11 @@ const here = Astro.url.pathname;
 
 <style>
   .header {
-    position: sticky;
-    top: 0;
+    flex: none;
+    position: relative;
     z-index: 50;
+    max-height: 100dvh;
+    overflow-y: auto;
     background: var(--surface-header);
     border-bottom: 1px solid var(--card-border);
   }
@@ -101,21 +112,21 @@ const here = Astro.url.pathname;
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
-    padding: var(--space-2) var(--space-4);
+    padding: var(--space-2) var(--space-3);
     color: var(--text);
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 15px;
     text-decoration: none;
     border-radius: var(--radius-sm);
     transition: color 100ms, background-color 100ms;
   }
   .nav a i { font-size: 22px; color: var(--icon); transition: color 100ms; }
   /* Thin rule between tabs. */
-  .nav a + a { position: relative; margin-left: var(--space-4); }
+  .nav a + a { position: relative; margin-left: var(--space-3); }
   .nav a + a::before {
     content: '';
     position: absolute;
-    left: calc(var(--space-4) * -0.5 - 1px);
+    left: calc(var(--space-3) * -0.5 - 1px);
     top: 20%;
     bottom: 20%;
     width: 1px;
@@ -139,7 +150,13 @@ const here = Astro.url.pathname;
   }
   .menu-btn:hover { color: var(--accent); }
 
-  @media (max-width: 1240px) {
+  /* Eight tabs need room: below this width the tabs drop to their own row. */
+  @media (max-width: 1560px) {
+    .nav { flex-basis: 100%; flex-wrap: wrap; padding-bottom: var(--space-3); }
+    .bar { gap: var(--space-2) var(--space-6); }
+  }
+
+  @media (max-width: 1000px) {
     .menu-btn { display: grid; }
     .nav {
       display: none;
@@ -151,6 +168,6 @@ const here = Astro.url.pathname;
     .nav[data-open='true'] { display: flex; }
     .nav a { padding-block: var(--space-3); }
     .nav a + a { margin-left: 0; margin-top: var(--space-1); }
-    .nav a + a::before { left: var(--space-4); right: var(--space-4); top: calc(var(--space-1) * -0.5 - 1px); bottom: auto; width: auto; height: 1px; }
+    .nav a + a::before { left: var(--space-3); right: var(--space-3); top: calc(var(--space-1) * -0.5 - 1px); bottom: auto; width: auto; height: 1px; }
   }
 </style>
