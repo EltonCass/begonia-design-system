@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sheet from '../components/Sheet.astro';
+import ColorCard from '../components/ColorCard.astro';
+import AlphaCard from '../components/AlphaCard.astro';
+import tokens from '../data/tokens.json';
+import meshBlueGreen from '../assets/mesh-blue-green.svg';
+
+// Same order as the Figma palette sheet, read row by row.
+const order = ['red', 'blue', 'mbrown', 'bsapphire', 'dwhite', 'mblue', 'dlavender', 'green', 'gray', 'black', 'white'];
+
+const gradient = (name: string) => tokens.gradient.tokens.find((t) => t.name === `gradient-${name}`)!.value;
+const dark = ['Moonlit-Asteroid', 'Dark-Purple', 'Ruby-Red', 'Tropical-Rain-Forest', 'Indigo-Rainbow'];
+const light = ['See-Egg-Blue', 'Turquoise-Blue'];
+const slug = (n: string) => n.toLowerCase();
+---
+
+<Layout title="Color">
+  <h1 class="visually-hidden">Color</h1>
+  <div class="canvas">
+    <Sheet id="palette" icon="palette" title="Color palette" rule="var(--red-60)">
+      <div class="cards">
+        {order.map((family) => <ColorCard family={family} />)}
+        <AlphaCard />
+      </div>
+    </Sheet>
+
+    <Sheet id="gradients" icon="palette" title="Gradients" rule="var(--red-60)">
+      <div class="groups">
+        <section>
+          <h3 class="group"><i class="ph-duotone ph-paint-brush" aria-hidden="true"></i>Dark Color</h3>
+          <ul class="tiles">
+            {dark.map((n) => (
+              <li class="tile" style={`background: ${gradient(slug(n))}`}>
+                <span class="label on-dark">{n}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h3 class="group"><i class="ph-duotone ph-paint-brush" aria-hidden="true"></i>Light Colors</h3>
+          <ul class="tiles">
+            {light.map((n) => (
+              <li class="tile" style={`background: ${gradient(slug(n))}`}>
+                <span class="label on-light">{n}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+        <section>
+          <h3 class="group"><i class="ph-duotone ph-share-network" aria-hidden="true"></i>Mesh Colors</h3>
+          <img class="mesh" src={meshBlueGreen.src} alt="Mesh gradient: blue and green along the top, lavender and teal below" width="240" height="238" />
+        </section>
+      </div>
+    </Sheet>
+  </div>
+</Layout>
+
+<style>
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(var(--space-4), 2.6vw, 40px) clamp(var(--space-4), 2.6vw, 40px);
+    align-items: start;
+  }
+  @media (max-width: 1100px) {
+    .cards { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .groups { display: grid; gap: var(--space-8); }
+  .group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .group i { font-size: 22px; }
+
+  .tiles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 168px));
+    gap: var(--space-8) clamp(var(--space-4), 6vw, 100px);
+  }
+  .tile {
+    position: relative;
+    aspect-ratio: 168 / 134;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .label {
+    position: absolute;
+    inset: auto 0 22%;
+    padding: 4px 6px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(2, 27, 39, 0.4);
+  }
+  .on-dark { background: rgba(2, 27, 39, 0.5); color: #fbfbfb; }
+  .on-light { background: rgba(2, 27, 39, 0.25); color: #021b27; text-shadow: none; }
+
+  .mesh { width: min(100%, 240px); height: auto; border-radius: 2px; }
+</style>

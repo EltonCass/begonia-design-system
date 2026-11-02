@@ -1,0 +1,38 @@
+---
+import { Image } from 'astro:assets';
+import flower from '../assets/begonia-flower.png';
+
+interface Props {
+  /** CSS width of the mark. The mark is always square. */
+  size?: string;
+  class?: string;
+}
+const { size = '100%', class: className } = Astro.props;
+---
+
+<!--
+  Figma masks the 902 x 883 flower image with an 887px circle offset 9px from its left edge.
+  The wrapper is the circle; the image is positioned to match that mask.
+-->
+<div class:list={['logo', className]} style={`--size: ${size}`}>
+  <Image src={flower} alt="" width={902} height={883} widths={[200, 480, 902]} sizes="(max-width: 700px) 90vw, 920px" />
+</div>
+
+<style>
+  .logo {
+    position: relative;
+    width: var(--size);
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 50%;
+    flex: none;
+  }
+  .logo :global(img) {
+    position: absolute;
+    top: 0;
+    left: -1.01%;
+    width: 101.69%;
+    max-width: none;
+    height: auto;
+  }
+</style>

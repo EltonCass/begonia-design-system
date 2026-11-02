@@ -1,0 +1,126 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sheet from '../components/Sheet.astro';
+import { samsa } from '../lib/copy';
+
+// The Figma sheet lists the standard rem scale (step n = n x 4px, plus a 1px step).
+const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7', '8', '9', '10', '12', '14', '16', '20', '24', '28', '32'].map(
+  (name) => {
+    const px = name === '0.1' ? 1 : Number(name) * 4;
+    const rem = px === 1 || px === 0 ? `${px}px` : `${px / 16}rem`;
+    return { name, rem, px };
+  },
+);
+---
+
+<Layout title="Spacing">
+  <h1 class="visually-hidden">Spacing</h1>
+  <div class="canvas">
+    <Sheet id="spacing" icon="table" title="Spacing" rule="var(--mbrown-70)">
+      <div class="layout">
+        <div class="scale">
+          <table>
+            <thead>
+              <tr><th>Name</th><th>Size</th><th>Pixels</th><th class="visually-hidden">Preview</th></tr>
+            </thead>
+            <tbody>
+              {steps.map((s) => (
+                <tr>
+                  <td>{s.name}</td>
+                  <td>{s.rem}</td>
+                  <td>{s.px}px</td>
+                  <td class="barcell">{s.px > 0 && <span class="bar" style={`width: ${s.px}px`}></span>}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p class="note t-label">
+            The Begonia blog overrides the two smallest steps: <code>space-1</code> is 2px and <code>space-1.5</code> is
+            4px. The semantic spacing tokens are listed in <code>tokens.json</code>.
+          </p>
+        </div>
+
+        <div class="demo-wrap">
+          <h3 class="demo-title"><i class="ph-duotone ph-presentation-chart" aria-hidden="true"></i>Demonstration</h3>
+          <div class="demo">
+            <div class="pad top"><span>64 px</span></div>
+            <div class="pad left"><span>64 px</span></div>
+            <div class="content">
+              <p class="h1">Chapter 1: Great Mornings</p>
+              <div class="gap g32"><span>32 px</span></div>
+              <p class="h2">Lucid Dream</p>
+              <div class="gap g16"><span>16 px</span></div>
+              <p class="para">{samsa}</p>
+            </div>
+            <div class="pad right"><span>64 px</span></div>
+            <div class="pad bottom"><span>64 px</span></div>
+          </div>
+        </div>
+      </div>
+    </Sheet>
+  </div>
+</Layout>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(300px, 580px) minmax(0, 1fr);
+    gap: clamp(var(--space-6), 3vw, 64px);
+    align-items: start;
+  }
+  .scale {
+    padding: var(--space-4) var(--space-6);
+    background: var(--white-10);
+    border-radius: 8px;
+    box-shadow: var(--shadow-md);
+  }
+  table { width: 100%; border-collapse: collapse; font-family: 'Roboto', sans-serif; font-size: 15px; }
+  th { text-align: left; font-weight: 500; padding: var(--space-3) var(--space-3) var(--space-3) 0; }
+  td { padding: 10px 12px 10px 0; border-top: 1px solid var(--black-10); }
+  tbody tr:first-child td { border-top-color: var(--black-30); }
+  th:first-child, td:first-child { width: 22%; }
+  .barcell { width: 100%; padding-right: 0; }
+  .bar { display: block; height: 14px; background: var(--mblue-40); max-width: 100%; }
+  .note { margin-top: var(--space-4); color: var(--black-20); }
+  code { font-family: ui-monospace, Consolas, monospace; }
+
+  .demo-title { display: flex; align-items: center; gap: var(--space-3); font-size: 22px; font-weight: 400; text-transform: uppercase; margin-bottom: var(--space-4); }
+  .demo-title i { font-size: 30px; }
+
+  /* The box is built with real 64px / 32px / 16px spacing, so it measures what it labels. */
+  .demo {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) 64px;
+    grid-template-rows: 64px auto 64px;
+    background: var(--blue-10);
+    border: 1px solid var(--mblue-30);
+    font-family: var(--font-display);
+  }
+  .pad { display: grid; place-items: center; color: var(--blue-80); font-size: 14px; background: var(--blue-10); }
+  .top { grid-column: 1 / -1; border-bottom: 1px solid var(--mblue-30); }
+  .bottom { grid-column: 1 / -1; border-top: 1px solid var(--mblue-30); }
+  .left { border-right: 1px solid var(--mblue-30); }
+  .right { border-left: 1px solid var(--mblue-30); }
+  .content { min-width: 0; color: #000; }
+  .h1 { font-size: clamp(26px, 2.3vw, 36px); line-height: 1.2; font-weight: 400; }
+  .h2 { font-size: clamp(22px, 1.8vw, 28px); line-height: 1.2; font-weight: 400; }
+  .para { font-size: 14px; line-height: 1.5; }
+  .gap {
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--mblue-30);
+    color: var(--blue-80);
+    font-size: 10px;
+  }
+  .g32 { height: 32px; }
+  .g16 { height: 16px; font-size: 9px; }
+
+  @media (max-width: 1000px) {
+    .layout { grid-template-columns: minmax(0, 1fr); }
+  }
+  /* Narrow phones: shrink the whole demo so 64px stays 64px relative to its content. */
+  @media (max-width: 640px) {
+    .demo { zoom: 0.6; }
+    .scale { padding-inline: var(--space-3); }
+  }
+</style>

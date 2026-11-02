@@ -1,0 +1,60 @@
+---
+interface Props {
+  /** Phosphor icon name, e.g. "palette". */
+  icon: string;
+  title: string;
+  /** CSS color of the rule under the header. Each Figma sheet has its own. */
+  rule: string;
+  id?: string;
+}
+const { icon, title, rule, id } = Astro.props;
+---
+
+<section class="sheet" id={id} style={`--rule: ${rule}`} aria-labelledby={id ? `${id}-title` : undefined}>
+  <header class="head">
+    <h2 class="title" id={id ? `${id}-title` : undefined}>
+      <i class={`ph-duotone ph-${icon}`} aria-hidden="true"></i>
+      {title}
+    </h2>
+    <span class="version">v 1.0</span>
+  </header>
+  <div class="body">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .sheet {
+    background: var(--white-10);
+    color: var(--black-50);
+    border-radius: clamp(16px, 2.2vw, 40px);
+    overflow: hidden;
+    font-family: var(--font-display);
+  }
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: clamp(64px, 5.8vw, 112px);
+    padding-inline: clamp(var(--space-4), 3.4vw, 64px);
+    border-bottom: clamp(2px, 0.2vw, 4px) solid var(--rule);
+  }
+  .title {
+    display: flex;
+    align-items: center;
+    gap: clamp(var(--space-3), 1.1vw, 20px);
+    font-size: clamp(20px, 1.9vw, 32px);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-shadow: 0 4px 8px rgba(2, 27, 39, 0.1), 0 10px 17px rgba(2, 27, 39, 0.1);
+  }
+  .title i { font-size: 1.35em; }
+  .version {
+    font-size: clamp(16px, 1.7vw, 28px);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .body { padding: clamp(var(--space-4), 3.4vw, 64px); }
+</style>

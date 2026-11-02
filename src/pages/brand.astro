@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sheet from '../components/Sheet.astro';
+import Logo from '../components/Logo.astro';
+---
+
+<Layout title="Brand">
+  <h1 class="visually-hidden">Brand</h1>
+  <div class="canvas">
+    <Sheet id="brand" icon="person-simple" title="Brand" rule="var(--blue-80)">
+      <h3 class="group"><i class="ph-duotone ph-figma-logo" aria-hidden="true"></i>Logo</h3>
+      <div class="box">
+        <div class="big"><Logo size="100%" /></div>
+        <div class="small" aria-label="The logo at smaller sizes">
+          <Logo size="var(--s1)" />
+          <Logo size="var(--s2)" />
+          <Logo size="var(--s3)" />
+          <Logo size="var(--s4)" />
+        </div>
+      </div>
+    </Sheet>
+  </div>
+</Layout>
+
+<style>
+  .group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .group i { font-size: 30px; }
+
+  .box {
+    --s1: 14.7%;
+    --s2: 7.4%;
+    --s3: 3.7%;
+    --s4: 2.6%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    aspect-ratio: 1810 / 965;
+    overflow: hidden;
+    border: 1px dashed var(--dlavender-30);
+    border-radius: 4px;
+  }
+  /* The big mark starts 20px below the box top and runs past its bottom edge, as in Figma. */
+  .big { align-self: start; padding-top: 1.1%; padding-left: 1.1%; }
+  .small {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+  }
+  /* The small marks are sized as a share of the box. */
+  .small :global(.logo) { flex: none; }
+
+  @media (max-width: 800px) {
+    .box {
+      --s1: 96px;
+      --s2: 56px;
+      --s3: 32px;
+      --s4: 24px;
+      grid-template-columns: 1fr;
+      aspect-ratio: auto;
+      gap: var(--space-8);
+      padding: var(--space-4);
+    }
+    .big { padding: 0; }
+    .small { gap: var(--space-4); justify-content: center; }
+  }
+</style>

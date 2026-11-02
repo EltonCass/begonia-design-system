@@ -1,0 +1,73 @@
+---
+import { hexToHsl } from '../lib/color';
+
+const cells = [
+  { label: 'Black-50-20%', token: 'alpha-black-20', pct: 20, base: '#1C1C1C' },
+  { label: 'Black-50-70%', token: 'alpha-black-70', pct: 70, base: '#1C1C1C' },
+  { label: 'Black-50-40%', token: 'alpha-black-40', pct: 40, base: '#1C1C1C' },
+  { label: 'Black-50-85%', token: 'alpha-black-85', pct: 85, base: '#1C1C1C' },
+  { label: 'Black-50-60%', token: 'alpha-black-60', pct: 60, base: '#1C1C1C' },
+  { label: 'White-10-75%', token: 'alpha-white-75', pct: 75, base: '#FBFBFB' },
+  { label: 'White-10-50%', token: 'alpha-white-50', pct: 50, base: '#FBFBFB' },
+  { label: 'White-10-25%', token: 'alpha-white-25', pct: 25, base: '#FBFBFB' },
+].map((c) => {
+  const [h, s, l] = hexToHsl(c.base);
+  return { ...c, hex: c.base, hsl: `${h}, ${s}, ${l}, ${c.pct}%`, dark: c.base === '#FBFBFB' };
+});
+---
+
+<article class="card">
+  <p class="t-h4 name">Base Name: Transparent (Alphas)</p>
+  <ul class="row">
+    {
+      cells.map((c) => (
+        <li class:list={['var', { dark: c.dark }]}>
+          <span class="t-h5 var-step">{c.label}</span>
+          <span class="mono">HEX: {c.hex}</span>
+          <span class="mono">HSL: {c.hsl}</span>
+          <span class="chip" style={`--alpha: var(--${c.token})`} />
+        </li>
+      ))
+    }
+  </ul>
+</article>
+
+<style>
+  .card {
+    container-type: inline-size;
+    display: grid;
+    gap: 12px;
+    padding: 16px 10px 20px;
+    background: #f5f5f5;
+    color: #1c1c1c;
+    border: 1px solid var(--white-80);
+    border-radius: 8px;
+  }
+  .name { padding-left: 4px; }
+  .row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px 4px;
+  }
+  .var {
+    display: grid;
+    gap: 6px;
+    padding: 8px 8px 0;
+    background: #f5f5f5;
+    color: #1c1c1c;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    min-width: 0;
+  }
+  .var.dark { background: #1c1c1c; color: #f5f5f5; }
+  .var-step { font-size: 12px; }
+  .mono { font-family: 'Roboto', sans-serif; font-size: 11px; line-height: 1.25; white-space: nowrap; }
+  /* The swatch shows the alpha over the card's own ground. */
+  .chip { height: 56px; margin: 4px -8px 0; background: linear-gradient(var(--alpha), var(--alpha)), var(--ground, #fff); }
+  .dark .chip { --ground: #1c1c1c; }
+  @container (max-width: 560px) { .row { grid-template-columns: repeat(2, 1fr); } }
+</style>

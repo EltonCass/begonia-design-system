@@ -1,0 +1,119 @@
+---
+import Logo from './Logo.astro';
+
+const base = import.meta.env.BASE_URL;
+const links = [
+  { href: 'color/', label: 'Color' },
+  { href: 'typography/', label: 'Typography' },
+  { href: 'spacing/', label: 'Spacing' },
+  { href: 'shadows-borders/', label: 'Shadows & borders' },
+  { href: 'layouts/', label: 'Layouts' },
+  { href: 'iconography/', label: 'Iconography' },
+  { href: 'brand/', label: 'Brand' },
+];
+const here = Astro.url.pathname;
+---
+
+<header class="header">
+  <div class="container bar">
+    <a class="home" href={base} aria-label="Begonia style guide, home">
+      <Logo size="40px" />
+      <span class="name">Begonia</span>
+    </a>
+
+    <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu">
+      <i class="ph-duotone ph-list" aria-hidden="true"></i>
+    </button>
+
+    <nav id="site-nav" class="nav" aria-label="Main">
+      {
+        links.map((l) => {
+          const href = `${base}${l.href}`;
+          return (
+            <a href={href} aria-current={here === href ? 'page' : undefined}>
+              {l.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+  </div>
+</header>
+
+<script>
+  const menuBtn = document.getElementById('menu-btn')!;
+  const nav = document.getElementById('site-nav')!;
+  menuBtn.addEventListener('click', () => {
+    const open = menuBtn.getAttribute('aria-expanded') === 'true';
+    menuBtn.setAttribute('aria-expanded', String(!open));
+    nav.dataset.open = String(!open);
+  });
+</script>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--surface-header);
+    border-bottom: 1px solid var(--card-border);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-6);
+    min-height: 72px;
+    flex-wrap: wrap;
+  }
+  .home { display: flex; align-items: center; gap: var(--space-3); text-decoration: none; }
+  .name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: -0.01em;
+    background: var(--gradient-name-dark);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .nav { display: flex; gap: var(--space-6); flex-wrap: wrap; }
+  .nav a {
+    color: var(--text);
+    font-family: var(--font-display);
+    font-size: 16px;
+    text-decoration: none;
+    padding-block: var(--space-2);
+    border-bottom: 2px solid transparent;
+  }
+  .nav a:hover { color: var(--accent); }
+  .nav a[aria-current='page'] { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .menu-btn {
+    display: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    font-size: 28px;
+    color: var(--icon);
+    background: transparent;
+    border: 0;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+  }
+  .menu-btn:hover { color: var(--accent); }
+
+  @media (max-width: 1000px) {
+    .menu-btn { display: grid; }
+    .nav {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      gap: var(--space-1);
+      padding-bottom: var(--space-4);
+    }
+    .nav[data-open='true'] { display: flex; }
+    .nav a { padding-block: var(--space-3); }
+  }
+</style>

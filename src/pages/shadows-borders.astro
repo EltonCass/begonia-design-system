@@ -1,0 +1,141 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sheet from '../components/Sheet.astro';
+
+const tint = 'rgba(2, 27, 39,';
+const drop = [
+  { label: 'Deep-rb-15', shadow: 'var(--shadow-rb)' },
+  { label: 'Deep-lb-15', shadow: 'var(--shadow-lb)' },
+  { label: 'Deep-md', shadow: 'var(--shadow-md)' },
+  { label: 'Deep-lg', shadow: 'var(--shadow-lg)' },
+  { label: 'Deep-xl', shadow: 'var(--shadow-xl)' },
+  { label: 'Deep-2xl', shadow: 'var(--shadow-2xl)' },
+];
+// Inner shadows are not in tokens.json; these are read off the Figma sheet.
+const inner = [
+  { label: 'Deep-rb-10', shadow: `inset -3px -3px 6px 0 ${tint} 0.1)` },
+  { label: 'Deep-tb-10', shadow: `inset 0 -6px 8px -3px ${tint} 0.12)` },
+  { label: 'Deep-md', shadow: `inset 0 2px 4px 0 ${tint} 0.1), inset 0 -3px 6px 0 ${tint} 0.1)` },
+  { label: 'Deep-lg', shadow: `inset 0 4px 8px 0 ${tint} 0.1), inset 0 -6px 10px 0 ${tint} 0.15)` },
+  { label: 'Deep-xl', shadow: `inset 0 6px 14px 0 ${tint} 0.1), inset 0 -12px 20px 0 ${tint} 0.2)` },
+  { label: 'Deep-xl', shadow: `inset 0 10px 24px 0 ${tint} 0.12), inset 0 -24px 36px 0 ${tint} 0.3)` },
+];
+const color = [
+  { label: 'Red-60/50', bg: 'var(--red-60)', shadow: 'var(--glow-red)' },
+  { label: 'Lavender-50/50', bg: 'var(--dlavender-50)', shadow: 'var(--glow-lavender)' },
+  { label: 'Green-30/50', bg: 'var(--green-30)', shadow: 'var(--glow-green)' },
+  { label: 'MBlue-50/50', bg: 'var(--mblue-30)', shadow: 'var(--glow-blue)' },
+  { label: 'Blue-80/50', bg: 'var(--blue-80)', shadow: '-6px 10px 15px 0 #194f7180, -3px 4px 8px 0 #194f7180' },
+  { label: 'Mbrown-50/50', bg: 'var(--mbrown-50)', shadow: 'var(--glow-mustard)' },
+];
+const oneSide = [
+  { label: 'Black-b-50', css: 'border-bottom: 2px solid var(--black-50)' },
+  { label: 'Green-b-30', css: 'border-bottom: 2px solid var(--green-30)' },
+  { label: 'Blue-b-30', css: 'border-bottom: 2px solid var(--mblue-30)' },
+  { label: 'Black-r-50', css: 'border-left: 2px solid var(--black-50)' },
+  { label: 'Green-r-30', css: 'border-left: 2px solid var(--green-30)' },
+  { label: 'Blue-r-30', css: 'border-left: 2px solid var(--mblue-30)' },
+];
+const allSides = [
+  { label: 'Black-50', css: 'border: 2px solid var(--black-50)' },
+  { label: 'Green-30', css: 'border: 2px solid var(--green-30)' },
+  { label: 'MBlue-30', css: 'border: 2px solid var(--mblue-30)' },
+  { label: 'Red-60', css: 'border: 2px solid var(--red-60)' },
+  { label: 'BSapphire-30', css: 'border: 2px dashed var(--bsapphire-30)' },
+  { label: 'MBrown-50', css: 'border: 2px dashed var(--mbrown-50)' },
+];
+---
+
+<Layout title="Shadows & borders">
+  <h1 class="visually-hidden">Shadows and borders</h1>
+  <div class="canvas">
+    <Sheet id="shadows" icon="intersect" title="Shadows" rule="var(--dlavender-50)">
+      <section>
+        <h3 class="group"><i class="ph-duotone ph-drop" aria-hidden="true"></i>Drop</h3>
+        <ul class="swatches">
+          {drop.map((s) => (
+            <li class="swatch" style={`box-shadow: ${s.shadow}`}><span class="label">{s.label}</span></li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <h3 class="group"><i class="ph-duotone ph-sun-dim" aria-hidden="true"></i>Inner</h3>
+        <ul class="swatches">
+          {inner.map((s) => (
+            <li class="swatch" style={`box-shadow: ${s.shadow}`}><span class="label">{s.label}</span></li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <h3 class="group"><i class="ph-duotone ph-palette" aria-hidden="true"></i>Color</h3>
+        <ul class="swatches">
+          {color.map((s) => (
+            <li class="swatch colored" style={`background: ${s.bg}; box-shadow: ${s.shadow}`}>
+              <span class="label dark">{s.label}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    </Sheet>
+
+    <Sheet id="borders" icon="text-b" title="Borders" rule="var(--dlavender-50)">
+      <section>
+        <h3 class="group"><i class="ph-duotone ph-drop" aria-hidden="true"></i>One side (examples)</h3>
+        <ul class="swatches">
+          {oneSide.map((s) => (
+            <li class="swatch flat" style={s.css}><span class="label">{s.label}</span></li>
+          ))}
+        </ul>
+      </section>
+      <section>
+        <h3 class="group"><i class="ph-duotone ph-sun-dim" aria-hidden="true"></i>All Sides</h3>
+        <ul class="swatches">
+          {allSides.map((s) => (
+            <li class="swatch flat" style={s.css}><span class="label">{s.label}</span></li>
+          ))}
+        </ul>
+      </section>
+    </Sheet>
+  </div>
+</Layout>
+
+<style>
+  section + section { margin-top: var(--space-8); }
+  .group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    font-size: 18px;
+    font-weight: 400;
+  }
+  .group i { font-size: 24px; }
+
+  .swatches {
+    list-style: none;
+    margin: 0;
+    padding: 0 clamp(0px, 0.6vw, 12px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: clamp(var(--space-5), 2.6vw, 48px);
+  }
+  .swatch {
+    position: relative;
+    aspect-ratio: 233 / 187;
+    background: var(--dwhite-10);
+    border-radius: 8px;
+    display: grid;
+    align-content: center;
+  }
+  .flat { box-shadow: none; }
+  .label {
+    padding: 4px var(--space-2);
+    background: rgba(28, 28, 28, 0.2);
+    text-align: center;
+    font-size: clamp(15px, 1.2vw, 20px);
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .label.dark { background: rgba(2, 27, 39, 0.65); color: var(--white-10); }
+  .colored .label { color: #fff; }
+</style>

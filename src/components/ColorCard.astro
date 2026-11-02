@@ -1,0 +1,117 @@
+---
+import { palette, inkOn } from '../lib/color';
+
+interface Props {
+  family: string;
+}
+const { family } = Astro.props;
+
+const swatches = palette(family);
+const base = swatches.find((s) => s.step === 50)!;
+const tints = swatches.filter((s) => s.step < 50);
+const shades = swatches.filter((s) => s.step > 50);
+const ink = inkOn(base.hex);
+// The WHITE card inverts: dark variation cards on a pale ground, outlined.
+const inverse = family === 'white';
+---
+
+<article class:list={['card', { inverse }]} style={`--base: ${base.hex}; --ink: ${ink}`}>
+  <div class="info">
+    <div class="name t-h4">
+      <p><span>Base Name: </span>{family.toUpperCase()}</p>
+      <p><span>Variation: </span>{base.step}</p>
+    </div>
+    <div class="codes t-h3">
+      <span>HEX: #{base.hex.slice(1)}</span>
+      <span>HSL: {base.hsl}</span>
+    </div>
+  </div>
+
+  {
+    [tints, shades].map((row) => (
+      <ul class="row">
+        {row.map((s) => (
+          <li class="var">
+            <span class="chip" style={`background: ${s.hex}`} />
+            <span class="meta">
+              <span class="t-h5 var-step">VAR: {s.step}</span>
+              <span class="mono">HEX: {s.hex}</span>
+              <span class="mono">HSL: {s.hsl}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    ))
+  }
+</article>
+
+<style>
+  .card {
+    container-type: inline-size;
+    display: grid;
+    gap: 20px;
+    padding: 16px 10px 20px;
+    background: var(--base);
+    color: var(--ink);
+    border-radius: 8px;
+  }
+  .info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 57px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .name { letter-spacing: 0.01em; }
+  .name span { opacity: 0.95; }
+  .codes {
+    flex: 1 1 260px;
+    max-width: 529px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    min-height: 40px;
+    background: #f5f5f5;
+    color: #1c1c1c;
+    border-radius: 6px;
+    text-align: center;
+    letter-spacing: 0.01em;
+  }
+  .row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .var {
+    display: grid;
+    grid-template-columns: 43% 1fr;
+    align-items: center;
+    min-width: 0;
+    height: 100px;
+    margin-inline: 2px;
+    overflow: hidden;
+    background: #f5f5f5;
+    color: #1c1c1c;
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+  }
+  .chip { align-self: stretch; }
+  .inverse { border: 1px solid var(--white-80); }
+  .inverse .var, .inverse .codes { background: #1c1c1c; color: #f5f5f5; }
+  .meta { display: grid; gap: 13px; justify-items: start; padding-left: 8px; min-width: 0; }
+  .var-step { font-size: 14px; line-height: 1.25; letter-spacing: 0.01em; }
+  .mono { font-family: 'Roboto', sans-serif; font-size: 12px; line-height: 1.25; white-space: nowrap; }
+
+  /* Narrow cards: two variations per row, and stack the codes. */
+  @container (max-width: 560px) {
+    .row { grid-template-columns: repeat(2, 1fr); gap: 8px 0; }
+    .codes { grid-template-columns: 1fr; flex-basis: 100%; max-width: none; padding-block: 8px; }
+    .codes.t-h3 { font-size: 16px; }
+  }
+  @container (max-width: 360px) {
+    .row { grid-template-columns: 1fr; }
+  }
+</style>

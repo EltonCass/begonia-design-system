@@ -1,0 +1,165 @@
+---
+import { icons } from '@phosphor-icons/core';
+import * as si from 'simple-icons';
+import Layout from '../layouts/Layout.astro';
+import Sheet from '../components/Sheet.astro';
+
+// Same three columns as the Figma sheet. Phosphor files "Development" under 'technology & development'.
+const columns: { title: string; key: string }[][] = [
+  [
+    { title: 'Arrows', key: 'arrows' },
+    { title: 'Brands', key: 'brands' },
+    { title: 'Commerce', key: 'commerce' },
+    { title: 'Media', key: 'media' },
+    { title: 'People', key: 'people' },
+  ],
+  [
+    { title: 'Communication', key: 'communication' },
+    { title: 'Design', key: 'design' },
+    { title: 'Development', key: 'technology & development' },
+    { title: 'Education', key: 'education' },
+    { title: 'Security & Warnings', key: 'security & warnings' },
+    { title: 'Office & Editing', key: 'office & editing' },
+    { title: 'Health & Wellness', key: 'health & wellness' },
+  ],
+  [
+    { title: 'Games', key: 'games' },
+    { title: 'Maps & Travel', key: 'maps & travel' },
+    { title: 'Math & Finance', key: 'math & finance' },
+    { title: 'System & Devices', key: 'system & devices' },
+    { title: 'Time', key: 'time' },
+    { title: 'Weather & Nature', key: 'weather & nature' },
+  ],
+];
+const byCategory = (key: string) => icons.filter((i) => i.figma_category === key);
+
+const brandNames = [
+  'Instagram', 'X', 'Facebook', 'Youtube', 'Tiktok', 'Twitch', 'Apple', 'Google', 'Dribbble', 'Behance',
+  'Figma', 'Github', 'Gitlab', 'Spotify', 'Steam', 'Telegram', 'Whatsapp', 'Pinterest', 'Reddit', 'Medium',
+  'Snapchat', 'Firefox', 'Notion', 'Dropbox', 'Discord', 'Docker', 'Android', 'Airbnb', 'Bitcoin', 'Ethereum',
+  'Paypal', 'Netflix', 'Shopify', 'Trello', 'Tumblr', 'Vimeo', 'Wordpress', 'Stackoverflow', 'Googledrive', 'Googlemeet',
+  'Gmail', 'Zoom', 'Playstation', 'Duolingo', 'Patreon', 'Mastodon', 'Bluesky', 'Threads', 'Astro', 'Typescript', 'Dotnet',
+];
+const logos = brandNames
+  .map((n) => (si as Record<string, { title: string; hex: string; path: string } | undefined>)[`si${n}`])
+  .filter((l): l is { title: string; hex: string; path: string } => Boolean(l));
+---
+
+<Layout title="Iconography">
+  <h1 class="visually-hidden">Iconography</h1>
+  <div class="canvas">
+    <Sheet id="icons" icon="image-square" title="Iconography" rule="var(--mblue-40)">
+      <div class="intro">
+        <p class="about">
+          <strong>Phosphor Icons 2.1</strong><br />Duotone
+        </p>
+        <p class="t-label">
+          {icons.length.toLocaleString('en-US')} icons made by Helena Zhang and Tobias Fried. Most of the icons here are from{' '}
+          <a href="https://phosphoricons.com/">Phosphor Icons</a>.
+        </p>
+        <div class="t-label">
+          <strong>For designer</strong>
+          <p>Icon Stroke 2</p>
+          <p>Icon Corner Radius 2</p>
+        </div>
+        <div class="t-label">
+          <strong>For developer</strong>
+          <p>
+            Phosphor is available as a one-liner script, React package, and Vue package, all of which can be sourced from
+            NPM or from a CDN. More information:{' '}
+            <a href="https://github.com/phosphor-icons/phosphor-home">github.com/phosphor-icons/phosphor-home</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="columns">
+        {
+          columns.map((col) => (
+            <div class="col">
+              {col.map((cat) => (
+                <section class="cat">
+                  <h3>{cat.title}</h3>
+                  <ul class="grid">
+                    {byCategory(cat.key).map((i) => (
+                      <li title={i.name}>
+                        <i class={`ph-duotone ph-${i.name}`} aria-hidden="true"></i>
+                        <span class="visually-hidden">{i.name}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </Sheet>
+
+    <Sheet id="logos" icon="figma-logo" title="Logos" rule="var(--mblue-40)">
+      <ul class="logos">
+        {
+          logos.map((l) => (
+            <li title={l.title}>
+              <svg viewBox="0 0 24 24" width="40" height="40" role="img" aria-label={l.title} fill={`#${l.hex}`}>
+                <path d={l.path} />
+              </svg>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="t-label note">Brand marks are drawn from Simple Icons in each brand's own color.</p>
+    </Sheet>
+  </div>
+</Layout>
+
+<style>
+  .intro {
+    display: grid;
+    grid-template-columns: auto minmax(0, 2fr) minmax(0, 1fr) minmax(0, 2fr);
+    gap: var(--space-6) clamp(var(--space-4), 3vw, 56px);
+    align-items: start;
+    margin-bottom: var(--space-10);
+    font-family: Mosk, sans-serif;
+  }
+  .about { font-size: 12px; line-height: 1.4; }
+  .intro a { color: var(--blue-70); }
+
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-8) clamp(var(--space-6), 4vw, 72px);
+    align-items: start;
+  }
+  .col { display: grid; gap: var(--space-6); }
+  .cat h3 { font-size: 15px; font-weight: 600; margin-bottom: var(--space-3); }
+  .grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(26px, 1fr));
+    gap: var(--space-2) 0;
+  }
+  .grid li { display: grid; place-items: center; width: 26px; height: 26px; font-size: 20px; color: var(--black-50); }
+  .grid li:hover { color: var(--mblue-40); }
+
+  .logos {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: var(--space-6) var(--space-4);
+    justify-items: center;
+  }
+  .note { margin-top: var(--space-6); color: var(--black-20); }
+
+  @media (max-width: 1100px) {
+    .intro { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 700px) {
+    .intro { grid-template-columns: minmax(0, 1fr); }
+    .columns { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>

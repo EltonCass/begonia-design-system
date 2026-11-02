@@ -1,0 +1,110 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sheet from '../components/Sheet.astro';
+import { samsa } from '../lib/copy';
+
+const offsets = [8, 32, 16];
+const grids = [4, 8, 16, 32];
+---
+
+<Layout title="Layouts">
+  <h1 class="visually-hidden">Layouts</h1>
+  <div class="canvas">
+    <Sheet id="layouts" icon="layout" title="Layouts" rule="var(--bsapphire-30)">
+      <div class="board">
+        {
+          offsets.map((n) => (
+            <section class="spec" style={`--n: ${n}px`}>
+              <h3><i class="ph-duotone ph-squares-four" aria-hidden="true"></i>Offset {n} / Auto Column {n} width / Auto Row {n} height</h3>
+              <div class="frame offset" role="img" aria-label={`A ${n}px layout grid`}></div>
+            </section>
+          ))
+        }
+
+        <div class="pair">
+          {
+            grids.slice(0, 2).map((n) => (
+              <section class="spec" style={`--n: ${n}px`}>
+                <h3><i class={`ph-duotone ph-number-circle-${n === 4 ? 'four' : 'eight'}`} aria-hidden="true"></i>Grid {n}</h3>
+                <div class="frame grid" role="img" aria-label={`A ${n}px square grid`}></div>
+              </section>
+            ))
+          }
+        </div>
+
+        {
+          grids.slice(2).map((n) => (
+            <section class="spec" style={`--n: ${n}px`}>
+              <h3><i class="ph-duotone ph-squares-four" aria-hidden="true"></i>Grid {n}</h3>
+              <div class="frame grid" role="img" aria-label={`A ${n}px square grid`}></div>
+            </section>
+          ))
+        }
+
+        {
+          [0, 1].map((i) => (
+            <section class="spec">
+              <h3><i class="ph-duotone ph-user-circle" aria-hidden="true"></i>Use</h3>
+              <article class={`use ${i ? 'wide' : ''}`}>
+                <p class="chapter">Chapter 1: Great Mornings</p>
+                <p class="sub">Lucid Dream</p>
+                <p class="cols">{samsa}</p>
+              </article>
+            </section>
+          ))
+        }
+      </div>
+    </Sheet>
+  </div>
+</Layout>
+
+<style>
+  .board {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-10) clamp(var(--space-6), 6vw, 110px);
+  }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); }
+  .spec h3 {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    font-size: clamp(16px, 1.3vw, 22px);
+    font-weight: 600;
+  }
+  .spec h3 i { font-size: 24px; flex: none; }
+
+  /* The Figma frames are layout grids: lines every N px, drawn here so they can be seen. */
+  .frame {
+    height: clamp(220px, 28vw, 440px);
+    border: 1px solid var(--bsapphire-30);
+    border-radius: 4px;
+    background-color: var(--white-10);
+    --line: rgba(35, 148, 183, 0.35);
+  }
+  .grid {
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: var(--n) var(--n);
+  }
+  .offset {
+    background-image: repeating-linear-gradient(90deg, rgba(235, 107, 109, 0.22) 0 var(--n), transparent var(--n) calc(var(--n) * 2));
+    background-size: 100% 100%;
+  }
+
+  .use { display: grid; gap: var(--space-3); font-family: var(--font-display); }
+  .chapter { font-size: clamp(22px, 1.8vw, 28px); }
+  .sub { font-size: clamp(18px, 1.4vw, 22px); padding-left: var(--space-8); }
+  .cols { column-count: 2; column-gap: var(--space-8); padding-left: var(--space-8); font-size: 14px; line-height: 1.45; }
+  .wide .cols { column-gap: var(--space-4); }
+
+  @media (max-width: 900px) {
+    .board { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .cols { column-count: 1; padding-left: 0; }
+    .sub { padding-left: 0; }
+  }
+</style>
