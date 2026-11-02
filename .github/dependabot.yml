@@ -1,0 +1,31 @@
+version: 2
+
+updates:
+  # npm packages. Dependabot uses this same ecosystem for pnpm, so it keeps working after the migration to pnpm.
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+    groups:
+      # One pull request per week for all minor and patch updates. Major versions stay separate.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # The actions used in .github/workflows (checkout, withastro/action, deploy-pages).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: chore
+    groups:
+      actions:
+        patterns:
+          - "*"
