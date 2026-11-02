@@ -10,10 +10,26 @@ const begonia = begoniaLogo();
 const master = sizes.begonia;
 const shown = [128, 64, 32, 24];
 
+// Same list and order as the Logos group in the Claude artifact.
 const logos = [
   { file: 'figma', name: 'Figma' },
   { file: 'github', name: 'GitHub' },
   { file: 'linkedin', name: 'LinkedIn' },
+  { file: 'angular', name: 'Angular' },
+  { file: 'astro', name: 'Astro' },
+  { file: 'azure', name: 'Azure' },
+  { file: 'blazor', name: 'Blazor' },
+  { file: 'claude-code', name: 'Claude Code' },
+  { file: 'claude', name: 'Claude' },
+  { file: 'csharp', name: 'C#' },
+  { file: 'css', name: 'CSS' },
+  { file: 'figma-alt', name: 'Figma (alt)' },
+  { file: 'fsharp', name: 'F#' },
+  { file: 'github-copilot', name: 'GitHub Copilot' },
+  { file: 'github-alt', name: 'GitHub (alt)' },
+  { file: 'html', name: 'HTML' },
+  { file: 'postgres', name: 'PostgreSQL' },
+  { file: 'sql-server', name: 'SQL Server' },
 ].map((l) => {
   const info = sizes.logos[l.file as keyof typeof sizes.logos];
   return {
@@ -71,8 +87,8 @@ const logos = [
 
     <Sheet id="logos" icon="figma-logo" title="Logos">
       <p class="lead">
-        Full-colour brand marks of the services Begonia links to. Each is a single SVG on a transparent background, with a PNG
-        export at 512 px on its longest side. Show them at 32 px inline and 64 px in footers, and keep their own colours.
+        Full-colour marks of the services and technologies Begonia works with. Each is an SVG with a PNG export at 512 px on
+        its longest side. Figma and GitHub also have an alternate mark. Show them at 32 px inline and 64 px in footers, and keep their own colours.
       </p>
       <div class="logos">
         {logos.map((l) => <AssetCard asset={l.asset} png={l.png} name={l.name} alt={`${l.name} logo`} fit="mark" meta={l.meta} />)}
@@ -158,7 +174,7 @@ const logos = [
   .specs dd { margin: 0; font-size: 15px; line-height: 1.45; }
 
   .lead { max-width: 70ch; margin-bottom: var(--space-5); font-size: 16px; line-height: 1.5; color: var(--black-30); }
-  .logos { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 280px)); gap: var(--space-6); }
+  .logos { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 280px)); gap: var(--space-8) var(--space-6); }
   .library {
     display: flex;
     flex-wrap: wrap;

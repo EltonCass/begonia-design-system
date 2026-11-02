@@ -18,13 +18,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      # The site is served from https://<owner>.github.io/<repo>/, so Astro needs both.
       SITE: https://${{ github.repository_owner }}.github.io
       BASE: /${{ github.event.repository.name }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: withastro/action@v3
+      - uses: actions/checkout@v7
+      # Installs dependencies, runs `npm run build` (tokens, type check, Astro build) and uploads dist/.
+      - uses: withastro/action@v6
         with:
-          node-version: 22
+          node-version: 24
 
   deploy:
     needs: build
@@ -34,4 +36,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

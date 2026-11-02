@@ -25,3 +25,13 @@ which `dev` and `build` run first. Pages read the same JSON for their palettes a
 
 Pushing to `main` runs `.github/workflows/deploy.yml`, which builds with `SITE` and `BASE` set from the
 repository and publishes to GitHub Pages. Enable it once under **Settings > Pages > Source: GitHub Actions**.
+
+## License
+
+The code is MIT licensed; see [LICENSE.txt](LICENSE.txt). The Begonia artwork, the third-party brand logos and the Mosk
+font files are not covered by it and keep their own terms, as that file explains.
+
+## Brand assets
+
+`npm run assets` rebuilds the downloadable files (the Begonia logo as PNG and SVG, and a PNG for every logo in
+`src/assets/logos`) and `src/data/brand-assets.json`. The generated files are committed, so the build does not need to run it.

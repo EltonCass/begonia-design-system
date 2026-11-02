@@ -10,6 +10,102 @@
     }
   },
   "logos": {
+    "angular": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 676
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 15874
+      }
+    },
+    "astro": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 2502
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 16835
+      }
+    },
+    "azure": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 3153
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 22134
+      }
+    },
+    "blazor": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 4251
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 27650
+      }
+    },
+    "claude": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 3612
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 19753
+      }
+    },
+    "claude-code": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 1471
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 6154
+      }
+    },
+    "csharp": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 3358
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 18590
+      }
+    },
+    "css": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 1881
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 14153
+      }
+    },
     "figma": {
       "svg": {
         "width": 94,
@@ -20,6 +116,30 @@
         "width": 344,
         "height": 512,
         "bytes": 11082
+      }
+    },
+    "figma-alt": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 1977
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 12330
+      }
+    },
+    "fsharp": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 453
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 11911
       }
     },
     "github": {
@@ -34,6 +154,42 @@
         "bytes": 17447
       }
     },
+    "github-alt": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 3764
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 16546
+      }
+    },
+    "github-copilot": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 4133
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 19321
+      }
+    },
+    "html": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 1914
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 13985
+      }
+    },
     "linkedin": {
       "svg": {
         "width": 140,
@@ -44,6 +200,30 @@
         "width": 512,
         "height": 512,
         "bytes": 8999
+      }
+    },
+    "postgres": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 10158
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 29292
+      }
+    },
+    "sql-server": {
+      "svg": {
+        "width": 200,
+        "height": 200,
+        "bytes": 25922
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 30792
       }
     }
   }

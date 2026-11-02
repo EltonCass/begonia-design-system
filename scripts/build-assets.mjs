@@ -1,8 +1,8 @@
 // Exports the downloadable brand files from their sources. Run with `npm run assets`.
 //   - Begonia logo: a circle-masked PNG, and an SVG that clips the artwork to a circle.
-//   - Figma, GitHub, LinkedIn: a transparent PNG next to each SVG.
+//   - Every brand logo in src/assets/logos: a transparent PNG next to its SVG.
 // Sizes are written to src/data/brand-assets.json so the Brand page never hard-codes them.
-import { mkdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import sharp from 'sharp';
 
 const LOGO_SIZE = 887; // Figma masks the artwork with an 887px circle, offset 9px from the image's left edge
@@ -47,7 +47,12 @@ out.begonia = {
 };
 
 // ---- Brand logos: PNG from SVG, longest side 512px ----
-for (const name of ['figma', 'github', 'linkedin']) {
+// claude-mark is only used on the How to use page, so it has no PNG export.
+const logoNames = readdirSync('src/assets/logos')
+  .filter((f) => f.endsWith('.svg') && f !== 'claude-mark.svg')
+  .map((f) => f.replace(/\.svg$/, ''))
+  .sort();
+for (const name of logoNames) {
   const file = `src/assets/logos/${name}.svg`;
   const text = readFileSync(file, 'utf8');
   const [, w, h] = text.match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/);
