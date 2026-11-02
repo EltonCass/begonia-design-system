@@ -3,13 +3,26 @@ import Layout from '../layouts/Layout.astro';
 import Sheet from '../components/Sheet.astro';
 import Logo from '../components/Logo.astro';
 import AssetCard from '../components/AssetCard.astro';
-import { svgAsset } from '../lib/assets';
+import { svgAsset, logoPng, begoniaLogo, kb } from '../lib/assets';
+import sizes from '../data/brand-assets.json';
+
+const begonia = begoniaLogo();
+const master = sizes.begonia;
+const shown = [128, 64, 32, 24];
 
 const logos = [
   { file: 'figma', name: 'Figma' },
   { file: 'github', name: 'GitHub' },
   { file: 'linkedin', name: 'LinkedIn' },
-].map((l) => ({ ...l, asset: svgAsset('logos', l.file) }));
+].map((l) => {
+  const info = sizes.logos[l.file as keyof typeof sizes.logos];
+  return {
+    ...l,
+    asset: svgAsset('logos', l.file),
+    png: logoPng(l.file),
+    meta: `SVG ${info.svg.width} × ${info.svg.height} px, ${kb(info.svg.bytes)} · PNG ${info.png.width} × ${info.png.height} px, ${kb(info.png.bytes)}`,
+  };
+});
 ---
 
 <Layout title="Brand">
@@ -20,17 +33,49 @@ const logos = [
       <div class="box">
         <div class="big"><Logo size="100%" alt="Begonia logo: a pink begonia flower inside a teal circle" /></div>
         <div class="small" aria-hidden="true">
-          <Logo size="var(--s1)" />
-          <Logo size="var(--s2)" />
-          <Logo size="var(--s3)" />
-          <Logo size="var(--s4)" />
+          {
+            shown.map((px) => (
+              <figure>
+                <Logo size={`${px}px`} />
+                <figcaption>{px} px</figcaption>
+              </figure>
+            ))
+          }
         </div>
+      </div>
+
+      <div class="info">
+        <div class="about">
+          <p>
+            The Begonia logo is a circular begonia illustration. Start from the master artwork and scale it down: it stays
+            square, and the corners outside the circle are transparent.
+          </p>
+          <div class="downloads">
+            <a class="btn" href={begonia.png.url} download={begonia.png.filename}>
+              <i class="ph-duotone ph-download-simple" aria-hidden="true"></i>PNG<span class="visually-hidden"> download: Begonia logo</span>
+            </a>
+            <a class="btn" href={begonia.svg.url} download={begonia.svg.filename}>
+              <i class="ph-duotone ph-download-simple" aria-hidden="true"></i>SVG<span class="visually-hidden"> download: Begonia logo</span>
+            </a>
+          </div>
+        </div>
+        <dl class="specs">
+          <div><dt>Shape</dt><dd>Circle in a square, 1:1</dd></div>
+          <div><dt>Master size</dt><dd>{master.width} × {master.height} px</dd></div>
+          <div><dt>Sizes shown</dt><dd>{shown.join(', ')} px</dd></div>
+          <div><dt>PNG</dt><dd>{master.width} × {master.height} px, transparent corners, {kb(master.png.bytes)}</dd></div>
+          <div><dt>SVG</dt><dd>Clips the artwork to the circle and embeds it as an image, so it does not scale like a vector drawing. {kb(master.svg.bytes)}</dd></div>
+        </dl>
       </div>
     </Sheet>
 
     <Sheet id="logos" icon="figma-logo" title="Logos">
+      <p class="lead">
+        Full-colour brand marks of the services Begonia links to. Each is a single SVG on a transparent background, with a PNG
+        export at 512 px on its longest side. Show them at 32 px inline and 64 px in footers, and keep their own colours.
+      </p>
       <div class="logos">
-        {logos.map((l) => <AssetCard asset={l.asset} name={l.name} alt={`${l.name} logo`} fit="mark" />)}
+        {logos.map((l) => <AssetCard asset={l.asset} png={l.png} name={l.name} alt={`${l.name} logo`} fit="mark" meta={l.meta} />)}
       </div>
 
       <aside class="library" aria-labelledby="library-title">
@@ -43,7 +88,7 @@ const logos = [
             there, then add it to this page.
           </p>
         </div>
-        <a class="btn" href="https://svglogos.dev/" target="_blank" rel="noopener noreferrer">
+        <a class="btn solid" href="https://svglogos.dev/" target="_blank" rel="noopener noreferrer">
           Browse svglogos.dev<i class="ph-duotone ph-arrow-up-right" aria-hidden="true"></i>
           <span class="visually-hidden">(opens in a new tab)</span>
         </a>
@@ -53,7 +98,67 @@ const logos = [
 </Layout>
 
 <style>
-  .logos { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 260px)); gap: var(--space-6); }
+  .group {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .group i { font-size: 30px; }
+
+  .box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    aspect-ratio: 1810 / 965;
+    overflow: hidden;
+    border: 1px dashed var(--dlavender-30);
+    border-radius: 4px;
+  }
+  /* The big mark starts a little below the box top and runs past its bottom edge, as in Figma. */
+  .big { align-self: start; padding-top: 1.1%; padding-left: 1.1%; }
+  .small { display: flex; align-items: center; justify-content: space-evenly; width: 100%; }
+  .small figure { margin: 0; display: grid; justify-items: center; gap: var(--space-2); }
+  .small figcaption { font-size: 13px; color: var(--black-20); }
+
+  .info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: var(--space-6) clamp(var(--space-6), 4vw, 72px);
+    align-items: start;
+    margin-top: var(--space-5);
+  }
+  .about { display: grid; gap: var(--space-4); font-size: 16px; line-height: 1.5; color: var(--black-30); }
+  .downloads { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 40px;
+    padding: var(--space-2) var(--space-4);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--mblue-40);
+    text-decoration: none;
+    background: var(--white-10);
+    border: 2px solid var(--mblue-40);
+    border-radius: var(--radius-sm);
+  }
+  .btn i { font-size: 20px; }
+  .btn:hover { background: var(--mblue-40); color: var(--white-10); }
+  .btn.solid { color: var(--white-10); background: var(--mblue-40); padding: var(--space-3) var(--space-5); font-size: 16px; }
+  .btn.solid i { font-size: 22px; }
+  .btn.solid:hover { background: var(--mblue-50); border-color: var(--mblue-50); }
+
+  .specs { margin: 0; display: grid; gap: var(--space-2); }
+  .specs > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: var(--space-4); padding-bottom: var(--space-2); border-bottom: 1px solid var(--white-80); }
+  .specs dt { font-size: 14px; font-weight: 600; color: var(--black-20); }
+  .specs dd { margin: 0; font-size: 15px; line-height: 1.45; }
+
+  .lead { max-width: 70ch; margin-bottom: var(--space-5); font-size: 16px; line-height: 1.5; color: var(--black-30); }
+  .logos { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 280px)); gap: var(--space-6); }
   .library {
     display: flex;
     flex-wrap: wrap;
@@ -70,67 +175,16 @@ const logos = [
   .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue-70); }
   .library h3 { font-size: 24px; font-weight: 600; }
   .library p:not(.eyebrow) { max-width: 60ch; font-size: 15px; line-height: 1.5; color: var(--black-30); }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    padding: var(--space-3) var(--space-5);
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--white-10);
-    text-decoration: none;
-    background: var(--mblue-40);
-    border: 2px solid var(--mblue-40);
-    border-radius: var(--radius-sm);
-  }
-  .btn i { font-size: 22px; }
-  .btn:hover { background: var(--mblue-50); border-color: var(--mblue-50); }
-  .group {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    margin-bottom: var(--space-6);
-    font-size: 22px;
-    font-weight: 600;
-  }
-  .group i { font-size: 30px; }
 
-  .box {
-    --s1: 14.7%;
-    --s2: 7.4%;
-    --s3: 3.7%;
-    --s4: 2.6%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    aspect-ratio: 1810 / 965;
-    overflow: hidden;
-    border: 1px dashed var(--dlavender-30);
-    border-radius: 4px;
+  @media (max-width: 1000px) {
+    .info { grid-template-columns: minmax(0, 1fr); }
   }
-  /* The big mark starts 20px below the box top and runs past its bottom edge, as in Figma. */
-  .big { align-self: start; padding-top: 1.1%; padding-left: 1.1%; }
-  .small {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    width: 100%;
-  }
-  /* The small marks are sized as a share of the box. */
-  .small :global(.logo) { flex: none; }
-
   @media (max-width: 800px) {
-    .box {
-      --s1: 96px;
-      --s2: 56px;
-      --s3: 32px;
-      --s4: 24px;
-      grid-template-columns: 1fr;
-      aspect-ratio: auto;
-      gap: var(--space-8);
-      padding: var(--space-4);
-    }
+    .box { grid-template-columns: 1fr; aspect-ratio: auto; gap: var(--space-8); padding: var(--space-4); }
     .big { padding: 0; }
-    .small { gap: var(--space-4); justify-content: center; }
+    .small { gap: var(--space-4); justify-content: center; flex-wrap: wrap; }
+  }
+  @media (max-width: 560px) {
+    .specs > div { grid-template-columns: minmax(0, 1fr); gap: 2px; }
   }
 </style>

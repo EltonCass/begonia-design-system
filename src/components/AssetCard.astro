@@ -1,5 +1,5 @@
 ---
-import type { SvgAsset } from '../lib/assets';
+import type { SvgAsset, DownloadAsset } from '../lib/assets';
 
 interface Props {
   asset: SvgAsset;
@@ -9,8 +9,12 @@ interface Props {
   alt: string;
   /** "tile" fills the picture area (meshes); "mark" centers a small logo on a neutral ground. */
   fit?: 'tile' | 'mark';
+  /** A short line of facts under the name, such as the dimensions and file sizes. */
+  meta?: string;
+  /** Adds a PNG download next to the SVG one. */
+  png?: DownloadAsset;
 }
-const { asset, name, alt, fit = 'tile' } = Astro.props;
+const { asset, name, alt, fit = 'tile', meta, png } = Astro.props;
 ---
 
 <figure class="asset">
@@ -18,12 +22,23 @@ const { asset, name, alt, fit = 'tile' } = Astro.props;
     <img src={asset.url} alt={alt} loading="lazy" />
   </div>
   <figcaption>
-    <span class="name">{name}</span>
+    <span class="text">
+      <span class="name">{name}</span>
+      {meta && <span class="meta">{meta}</span>}
+    </span>
     <span class="actions">
       <a class="act" href={asset.url} download={asset.filename}>
         <i class="ph-duotone ph-download-simple" aria-hidden="true"></i>
         SVG<span class="visually-hidden"> download: {name}</span>
       </a>
+      {
+        png && (
+          <a class="act" href={png.url} download={png.filename}>
+            <i class="ph-duotone ph-download-simple" aria-hidden="true"></i>
+            PNG<span class="visually-hidden"> download: {name}</span>
+          </a>
+        )
+      }
       <button type="button" class="act copyable" data-copy={asset.raw}>
         <i class="ph-duotone ph-copy" aria-hidden="true"></i>
         Copy<span class="visually-hidden"> SVG code: {name}</span>
@@ -45,9 +60,11 @@ const { asset, name, alt, fit = 'tile' } = Astro.props;
     box-shadow: none;
   }
   .picture.mark img { width: 40%; max-width: 96px; height: auto; max-height: 56%; object-fit: contain; }
-  figcaption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2); }
+  figcaption { display: grid; gap: var(--space-2); }
+  .text { display: grid; gap: 2px; }
   .name { font-size: 15px; font-weight: 600; }
-  .actions { display: inline-flex; gap: var(--space-2); }
+  .meta { font-size: 13px; line-height: 1.4; color: var(--black-20); }
+  .actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
   .act {
     display: inline-flex;
     align-items: center;

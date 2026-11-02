@@ -1,0 +1,50 @@
+{
+  "begonia": {
+    "width": 887,
+    "height": 887,
+    "png": {
+      "bytes": 1175808
+    },
+    "svg": {
+      "bytes": 191980
+    }
+  },
+  "logos": {
+    "figma": {
+      "svg": {
+        "width": 94,
+        "height": 140,
+        "bytes": 930
+      },
+      "png": {
+        "width": 344,
+        "height": 512,
+        "bytes": 11082
+      }
+    },
+    "github": {
+      "svg": {
+        "width": 144,
+        "height": 140,
+        "bytes": 2726
+      },
+      "png": {
+        "width": 512,
+        "height": 498,
+        "bytes": 17447
+      }
+    },
+    "linkedin": {
+      "svg": {
+        "width": 140,
+        "height": 140,
+        "bytes": 968
+      },
+      "png": {
+        "width": 512,
+        "height": 512,
+        "bytes": 8999
+      }
+    }
+  }
+}

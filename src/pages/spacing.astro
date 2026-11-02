@@ -1,7 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Sheet from '../components/Sheet.astro';
-import { samsa } from '../lib/copy';
+import CodeView from '../components/CodeView.astro';
+import { spacingDemo } from '../lib/snippets';
 
 // The Figma sheet lists the standard rem scale (step n = n x 4px, plus a 1px step).
 const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7', '8', '9', '10', '12', '14', '16', '20', '24', '28', '32'].map(
@@ -11,6 +12,8 @@ const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7
     return { name, rem, px };
   },
 );
+
+const demo = spacingDemo();
 ---
 
 <Layout title="Spacing">
@@ -43,19 +46,12 @@ const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7
 
         <div class="demo-wrap">
           <h3 class="demo-title"><i class="ph-duotone ph-presentation-chart" aria-hidden="true"></i>Demonstration</h3>
-          <div class="demo">
-            <div class="pad top"><span>64 px</span></div>
-            <div class="pad left"><span>64 px</span></div>
-            <div class="content">
-              <p class="h1">Chapter 1: Great Mornings</p>
-              <div class="gap g32"><span>32 px</span></div>
-              <p class="h2">Lucid Dream</p>
-              <div class="gap g16"><span>16 px</span></div>
-              <p class="para">{samsa}</p>
+          <CodeView id="spacing-demo" title="Spacing demonstration" html={demo.html} css={demo.css}>
+            <div class="preview-box cv-demo">
+              <style is:inline set:html={demo.previewCss} />
+              <Fragment set:html={demo.previewHtml} />
             </div>
-            <div class="pad right"><span>64 px</span></div>
-            <div class="pad bottom"><span>64 px</span></div>
-          </div>
+          </CodeView>
         </div>
       </div>
     </Sheet>
@@ -90,40 +86,14 @@ const steps = ['0', '0.1', '0.5', '1', '1.5', '2', '2.5', '3', '4', '5', '6', '7
   .demo-title { display: flex; align-items: center; gap: var(--space-3); font-size: 22px; font-weight: 400; text-transform: uppercase; margin-bottom: var(--space-4); }
   .demo-title i { font-size: 30px; }
 
-  /* The box is built with real 64px / 32px / 16px spacing, so it measures what it labels. */
-  .demo {
-    display: grid;
-    grid-template-columns: 64px minmax(0, 1fr) 64px;
-    grid-template-rows: 64px auto 64px;
-    background: var(--blue-10);
-    border: 1px solid var(--mblue-30);
-    font-family: var(--font-display);
-  }
-  .pad { display: grid; place-items: center; color: var(--blue-80); font-size: 14px; background: var(--blue-10); }
-  .top { grid-column: 1 / -1; border-bottom: 1px solid var(--mblue-30); }
-  .bottom { grid-column: 1 / -1; border-top: 1px solid var(--mblue-30); }
-  .left { border-right: 1px solid var(--mblue-30); }
-  .right { border-left: 1px solid var(--mblue-30); }
-  .content { min-width: 0; color: #000; }
-  .h1 { font-size: clamp(26px, 2.3vw, 36px); line-height: 1.2; font-weight: 400; }
-  .h2 { font-size: clamp(22px, 1.8vw, 28px); line-height: 1.2; font-weight: 400; }
-  .para { font-size: 14px; line-height: 1.5; }
-  .gap {
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--mblue-30);
-    color: var(--blue-80);
-    font-size: 10px;
-  }
-  .g32 { height: 32px; }
-  .g16 { height: 16px; font-size: 9px; }
+  .preview-box { font-family: var(--font-display); }
 
   @media (max-width: 1000px) {
     .layout { grid-template-columns: minmax(0, 1fr); }
   }
   /* Narrow phones: shrink the whole demo so 64px stays 64px relative to its content. */
   @media (max-width: 640px) {
-    .demo { zoom: 0.6; }
+    .cv-demo :global(.demo) { zoom: 0.6; }
     .scale { padding-inline: var(--space-3); }
   }
 </style>

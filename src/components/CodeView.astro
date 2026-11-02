@@ -1,5 +1,5 @@
 ---
-// A small CodePen-style viewer: Preview, HTML and CSS tabs, plus a button that opens the same code in CodePen.
+// A small CodePen-style viewer: Preview, HTML and CSS tabs, each code pane with a copy button.
 interface Props {
   /** Unique id prefix for the tab/panel ids. */
   id: string;
@@ -14,9 +14,6 @@ const panes = [
   { key: 'html', label: 'HTML' },
   { key: 'css', label: 'CSS' },
 ] as const;
-
-// CodePen's prefill API: POST a JSON "data" field to /pen/define.
-const codepen = JSON.stringify({ title, html, css, editors: '110', layout: 'left' });
 ---
 
 <div class="codeview" data-codeview>
@@ -38,13 +35,6 @@ const codepen = JSON.stringify({ title, html, css, editors: '110', layout: 'left
         ))
       }
     </div>
-    <form action="https://codepen.io/pen/define" method="POST" target="_blank">
-      <input type="hidden" name="data" value={codepen} />
-      <button type="submit" class="pen">
-        Edit on CodePen<i class="ph-duotone ph-arrow-up-right" aria-hidden="true"></i>
-        <span class="visually-hidden">(opens in a new tab)</span>
-      </button>
-    </form>
   </div>
 
   <div class="panel preview" role="tabpanel" id={`${id}-panel-preview`} aria-labelledby={`${id}-tab-preview`}>
@@ -132,26 +122,6 @@ const codepen = JSON.stringify({ title, html, css, editors: '110', layout: 'left
   .tab:hover { color: var(--white-10); }
   .tab[aria-selected='true'] { color: var(--white-10); border-bottom-color: var(--green-10); }
   .tab:focus-visible { outline: 2px solid var(--green-10); outline-offset: -2px; }
-  .pen {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    margin-bottom: var(--space-1);
-    padding: var(--space-1) var(--space-3);
-    min-height: 32px;
-    font: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--white-10);
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.45);
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  .pen:hover { background: rgba(255, 255, 255, 0.14); }
-  .pen:focus-visible { outline: 2px solid var(--green-10); outline-offset: 2px; }
-  .pen i { font-size: 16px; }
-
   .panel[hidden] { display: none; }
   .preview { padding: var(--space-4); }
   .code { position: relative; background: var(--black-40); color: var(--white-10); }

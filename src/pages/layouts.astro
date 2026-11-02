@@ -1,9 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Sheet from '../components/Sheet.astro';
-import { samsa } from '../lib/copy';
+import CodeView from '../components/CodeView.astro';
+import { useExample } from '../lib/snippets';
 
 const offsets = [8, 32, 16];
+const examples = [16, 32].map((n) => ({ n, ...useExample(n) }));
 const grids = [4, 8, 16, 32];
 
 const gridCss = (n: number) =>
@@ -47,15 +49,16 @@ const offsetCss = (n: number) =>
         }
 
         {
-          [16, 32].map((n) => (
-            <section class="spec" style={`--n: ${n}px`}>
+          examples.map((ex) => (
+            <section class="spec">
               <h3><i class="ph-duotone ph-user-circle" aria-hidden="true"></i>Use</h3>
-              <p class="use-spec">Offset {n} / Auto Column {n} width / Auto Row {n} height</p>
-              <article class="use">
-                <h4 class="chapter">Chapter 1: Great Mornings</h4>
-                <h5 class="sub">Lucid Dream</h5>
-                <p class="cols">{samsa}</p>
-              </article>
+              <p class="use-spec">Offset {ex.n} / Auto Column {ex.n} width / Auto Row {ex.n} height</p>
+              <CodeView id={`use-${ex.n}`} title={`Use: offset ${ex.n}`} html={ex.html} css={ex.css}>
+                <div class={`preview-box cv-use-${ex.n}`}>
+                  <style is:inline set:html={ex.previewCss} />
+                  <Fragment set:html={ex.previewHtml} />
+                </div>
+              </CodeView>
             </section>
           ))
         }
@@ -101,23 +104,12 @@ const offsetCss = (n: number) =>
   }
 
   .use-spec { margin: calc(var(--space-2) * -1) 0 var(--space-3); font-size: 14px; color: var(--black-20); }
-  /* The padding, the row gap and the column gap all use the same offset. */
-  .use {
-    display: grid;
-    gap: var(--n);
-    padding: var(--n);
-    font-family: var(--font-display);
-    outline: 1px dashed var(--bsapphire-30);
-    outline-offset: -1px;
-  }
-  .chapter { font-size: clamp(22px, 1.8vw, 28px); font-weight: 400; }
-  .sub { font-size: clamp(18px, 1.4vw, 22px); font-weight: 400; }
-  .cols { column-count: 2; column-gap: var(--n); font-size: 14px; line-height: 1.45; }
+  /* The preview runs the CSS shown in the CSS tab; this only sets the page-level font and color the tab's body rule sets. */
+  .preview-box { font-family: var(--font-display); color: var(--black-50); }
 
   @media (max-width: 900px) {
     .board { grid-template-columns: minmax(0, 1fr); }
   }
   @media (max-width: 560px) {
-    .cols { column-count: 1; }
   }
 </style>

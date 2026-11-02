@@ -16,10 +16,10 @@ const sections = [
   { href: 'color/', icon: 'palette', title: 'Color', text: 'Eleven nine-step palettes, alphas and named gradients.' },
   { href: 'typography/', icon: 'pen-nib', title: 'Typography', text: 'Open Sans and Mosk, with heading and content sizes.' },
   { href: 'spacing/', icon: 'table', title: 'Spacing', text: 'The spacing scale and how it measures out a page.' },
-  { href: 'brand/', icon: 'person-simple', title: 'Brand', text: 'The begonia logo at every size.' },
+  { href: 'brand/', icon: 'person-simple', title: 'Brand', text: 'The begonia logo and the brand logos, with SVG and PNG downloads.' },
   { href: 'shadows-borders/', icon: 'intersect', title: 'Shadows & borders', text: 'Drop, inner and color shadows. One-side and full borders.' },
   { href: 'layouts/', icon: 'layout', title: 'Layouts', text: 'Offsets and square grids, and a layout in use.' },
-  { href: 'iconography/', icon: 'image-square', title: 'Iconography', text: 'Phosphor duotone icons and brand logos.' },
+  { href: 'iconography/', icon: 'image-square', title: 'Iconography', text: 'The Phosphor duotone icon set, grouped by category.' },
   { href: 'how-to-use/', icon: 'rocket-launch', title: 'How to use', text: 'The Figma file, the GitHub repo, the Claude artifact and a quick start.' },
 ];
 ---
@@ -66,6 +66,13 @@ const sections = [
       }
     </ul>
   </section>
+
+  <footer class="container credit">
+    <p>
+      Designed and developed by{' '}
+      <a href="https://github.com/EltonCass" target="_blank" rel="noopener noreferrer">Elton Cassas<span class="visually-hidden"> (opens in a new tab)</span></a>.
+    </p>
+  </footer>
 </Layout>
 
 <style>
@@ -113,7 +120,10 @@ const sections = [
     text-shadow: 0 4px 8px rgba(2, 27, 39, 0.1), 0 10px 17px rgba(2, 27, 39, 0.1);
   }
 
-  .index { margin-top: var(--space-16); padding-bottom: var(--space-24); }
+  .index { margin-top: var(--space-16); }
+  .credit { padding-block: var(--space-12) var(--space-10); }
+  .credit p { font-size: 14px; color: var(--text-muted); }
+  .credit a { color: var(--accent); font-weight: 600; }
   .cards {
     list-style: none;
     margin: 0;

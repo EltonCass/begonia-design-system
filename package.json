@@ -8,7 +8,8 @@
     "dev": "npm run tokens && astro dev",
     "build": "npm run tokens && astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "assets": "node scripts/build-assets.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
@@ -18,5 +19,8 @@
     "@phosphor-icons/web": "^2.1.2",
     "astro": "^7.4.4",
     "typescript": "^6.0.3"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
   }
 }
